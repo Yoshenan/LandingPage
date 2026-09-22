@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+    "strict": true
+  }
+}

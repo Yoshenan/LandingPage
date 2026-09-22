@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "@types/connect-mongo": "^3.1.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/express-session": "^1.19.0",
+    "@types/node": "^26.2.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "@parcel/watcher@2.5.1": true,
+    "bcrypt@6.0.0": true,
+    "esbuild@0.28.2": true
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "error": "^10.4.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.9.2"
+  }
+}

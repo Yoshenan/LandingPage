@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="output.css" rel="stylesheet" />
+  <title>Form</title>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen flex items-center justify-center p-4">
+
+  <!-- Form Container -->
+  <div class="w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6">
+    
+    <!-- Title Section -->
+    <div class="flex justify-between items-center border-b border-slate-800 pb-4">
+      <div>
+        <h1 id = "form-title" class="text-3xl font-bold text-emerald-400">Request Form</h1>
+        <p id = "form-subtitle" class="text-sm text-slate-200 mt-1">Please fill out the details below to complete your request.</p>
+      </div>
+      <a href="page.html" id="form-back" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg border border-slate-700 transition text-sm font-medium">
+        &larr; Back to Dashboard
+      </a>
+    </div>
+
+    <!-- Registration Form -->
+    <form id="form" action="#" class="w-full space-y-6">
+
+      <input type="hidden" id="edit-request-id" value="" />
+
+      <!-- SECTION 1: REQUESTER DETAILS -->
+      <div class="form-section border border-slate-800 rounded-xl bg-slate-800/40 overflow-hidden transition-all duration-300">
+        <button type="button" class="section-toggle w-full flex justify-between items-center p-4 text-left hover:bg-slate-800/80 transition cursor-pointer">
+          <span class="block text-base font-semibold text-emerald-400">1. Requester Details</span>
+          <span class="toggle-icon text-xs font-mono text-emerald-400 font-bold">[−]</span>
+        </button>
+
+        <div class="section-content p-4 pt-0 space-y-4">
+          <!-- Client Display -->
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-200">Client <span class="text-red-500">*</span></label>
+            <div id="client-display" class="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-lg text-slate-200 font-medium text-sm">
+              Shell
+            </div>
+          </div>
+
+          <!-- Organization -->
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-200">Organization <span class="text-red-500">*</span></label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="flex items-center gap-3 p-3 bg-slate-800 border border-slate-700 rounded-lg cursor-pointer hover:border-slate-500 transition-colors">
+                <input type="radio" name="organization" id="org-company-radio" value="Shell" checked class="w-4 h-4 text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-slate-600" />
+                <span id="org-company-label" class="text-sm text-slate-200 font-medium">Shell</span>
+              </label>
+
+              <label class="flex items-center gap-3 p-3 bg-slate-800 border border-slate-700 rounded-lg cursor-pointer hover:border-slate-500 transition-colors">
+                <input type="radio" name="organization" value="INTERNAL" class="w-4 h-4 text-emerald-500 focus:ring-emerald-500 bg-slate-900 border-slate-600" />
+                <span class="text-sm text-slate-200 font-medium">Strateq</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Full Name & Email Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <label for="name" class="block text-sm font-medium text-slate-200">Full Name <span class="text-red-500">*</span></label>
+              <input type="text" id="name" placeholder="Enter your name" 
+                class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="email" class="block text-sm font-medium text-slate-200">Email <span class="text-red-500">*</span></label>
+              <input type="email" id="email" placeholder="Enter your email" 
+                class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="space-y-1.5">
+            <label for="phone-num" class="block text-sm font-medium text-slate-200">Phone Number <span class="text-red-500">*</span></label>
+            <input type="tel" id="phone-num" placeholder="Enter your number" 
+              class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: REQUEST DETAILS -->
+      <div class="form-section border border-slate-800 rounded-xl bg-slate-800/40 overflow-hidden transition-all duration-300">
+        <button type="button" class="section-toggle w-full flex justify-between items-center p-4 text-left hover:bg-slate-800/80 transition cursor-pointer">
+          <span class="block text-base font-semibold text-emerald-400">2. Request Details</span>
+          <span class="toggle-icon text-xs font-mono text-emerald-400 font-bold">[−]</span>
+        </button>
+
+        <div class="section-content p-4 pt-0 space-y-5">
+          <!-- Environment Details -->
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-200">Environment <span class="text-red-500"></span></label>
+            <div class="flex gap-3">
+              <label class="flex items-center space-x-2.5 px-4 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="environment" value="Production" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Production</span>
+              </label>
+              <label class="flex items-center space-x-2.5 px-4 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="environment" value="UAT" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">UAT</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Platform Category Group -->
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-200">Platform Category <span class="text-red-500"></span></label>
+            <div class="space-y-2">
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="VM Access"class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">VM Access (Virtual Machine)</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="VPN Access" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">VPN Access (Virtual Private Network)</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="Atlas MongoDB Monitoring Access" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Atlas MongoDB Monitoring Access</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="Atlas MongoDB Management Access" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Atlas MongoDB Management Access</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="Microsoft Azure Monitoring Access" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Microsoft Azure Monitoring Access</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="Microsoft Azure Management Access" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Microsoft Azure Management Access</span>
+              </label>
+
+              <label class="flex items-center space-x-3 p-3 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors">
+                <input type="radio" name="platform_category" value="Application Portal" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Application Portal (Payment Switch Management Portal)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Request Action Options -->
+          <div class="space-y-1.5">
+            <label class="block text-sm font-medium text-slate-200">Request Action <span class="text-red-500"></span></label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <label class="flex items-center justify-center text-center px-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors gap-2">
+                <input type="radio" name="request_type" value="New" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">New</span>
+              </label>
+
+              <label class="flex items-center justify-center text-center px-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors gap-2">
+                <input type="radio" name="request_type" value="Re-activate" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200">Re-activate</span>
+              </label>
+
+              <label class="flex items-center justify-center text-center px-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors gap-2">
+                <input type="radio" name="request_type" value="Reset Password" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200 whitespace-nowrap">Reset Password</span>
+              </label>
+
+              <label class="flex items-center justify-center text-center px-3 py-2.5 rounded-lg bg-slate-800 border border-slate-700 cursor-pointer hover:bg-slate-700/50 transition-colors gap-2">
+                <input type="radio" name="request_type" value="Delete or Block" class="w-4 h-4 text-emerald-600 bg-slate-900 border-slate-700 focus:ring-emerald-500">
+                <span class="text-sm font-medium text-slate-200 whitespace-nowrap">Delete or Block</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="pt-2">
+        <input type="submit" value="Request" 
+          class="w-full py-3 px-6 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold rounded-lg shadow-lg shadow-emerald-950/40 cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-emerald-400 active:scale-[0.99]">
+      </div>
+    </form>
+  </div>
+
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <script type="module" src="../dist/base.js" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.section-toggle').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const content = btn.nextElementSibling;
+          const icon = btn.querySelector('.toggle-icon');
+
+          if (content) {
+            content.classList.toggle('hidden');
+            if (icon) {
+              icon.textContent = content.classList.contains('hidden') ? '[+]' : '[−]';
+            }
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

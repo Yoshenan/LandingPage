@@ -1,0 +1,69 @@
+import mongoose, { Document, Schema } from 'mongoose';
+import bcrypt from 'bcryptjs';
+
+export   function hashPassword(password:string):string {
+  const SALTROUNDS =12
+  return  bcrypt.hashSync(password ,SALTROUNDS);
+}
+
+export interface IUser extends Document {
+  username: string;
+  password?: string;
+  companyName: String;
+  role: string;
+}
+
+export interface ILog extends Document {
+  fullName: String;
+  email: String;
+  company: String;
+  phoneNum: String;
+  enviromentDetails: String;
+  platForm: String;
+  Req : String;
+  organization: String;
+  createdAt: Date;
+  entry:String,
+  username:String,
+  companyName : String
+  
+}
+
+
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true},
+  companyName: { type: String, required: true },
+  role: { type: String, default: 'User'},
+});
+
+// 2. Log Schema & Model Definition (Now includes company & username tracking)
+const logSchema = new mongoose.Schema({
+  fullName: String,
+  email: String,
+  company: String,
+  environmentDetails: String,
+  platForm: String,
+  Req: String,
+  num: String,
+  organization: String,
+  createdAt: { type: Date, default: Date.now },
+  entry: { type: String },
+  username:String,
+  companyName : String
+});
+
+
+export const User = mongoose.model('User', userSchema);
+export const Log = mongoose.model('Log', logSchema);
+
+// 4. Database Connection Function
+export const connectDB = async () => {
+  try {
+    await mongoose.connect('mongodb+srv://SYSTEM:IvRoKoZhnNHdbrOk@cluster0.zwk0sb6.mongodb.net/?appName=Cluster0');
+    console.log('Connection to mongo db successful');
+  } catch (err) {
+    console.error('DB Connection Error:', err);
+  }
+};
+
