@@ -24,16 +24,29 @@ const logSchema = new mongoose.Schema({
     entry: { type: String },
     username: String,
     companyName: String,
+});
 
+const telegramSchema = new mongoose.Schema({
+  client: String,
+  organization: String,
+  fullName: String,
+  email: String,
+  phone: String,
+  environment: String,
+  platformCategory: String,
+  requestType: String,
 
-    client : String,
-    source : String,
-    submittedBy : String,
-    submittedAt : String
+  source: String,
+  submittedAt: String,
 
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 export const User = mongoose.model('User', userSchema);
 export const Log = mongoose.model('Log', logSchema);
+export const Telegram = moongoose.model('Telegram', telegramSchema);
 // 4. Database Connection Function
 export const connectDB = async () => {
     try {
