@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const safeRole = escapeHtml(rawRole);
 
     return `
-      <td class="py-3 px-4 font-mono text-slate-200 pointer-events-none">${safeUsername}</td>
+      <td class="py-3 px-4 font-mono text-slate-800 dark:text-slate-200 pointer-events-none">${safeUsername}</td>
       <td class="py-3 px-4 text-emerald-400 pointer-events-none">${safeCompany}</td>
       <td class="py-3 px-4 pointer-events-none">
         <span class="${roleBadgeClass} px-2 py-0.5 rounded text-xs font-semibold">
