@@ -168,7 +168,7 @@ const requestWizard = new Scenes.WizardScene<Scenes.WizardContext>(
 );
 
 const bot = new Telegraf<Scenes.WizardContext>(
-  '8665328311:AAEgWgELLW0f_6qxN_anpN_mmgSoIlah7Vs'
+  '8665328311:AAGhaIXRLom1Yr86cjbuzdkurdJEJKopxB0'
 );
 
 const stage = new Scenes.Stage<Scenes.WizardContext>([
