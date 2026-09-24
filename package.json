@@ -26,5 +26,8 @@
     "express-session": "^1.19.0",
     "mongoose": "^9.9.2",
     "telegraf": "^4.16.3"
-  }
+  },
+  "scripts": {
+  "build:css": "npx @tailwindcss/cli -i ./src/styles/input.css -o ./public/output.css"
+}
 }
