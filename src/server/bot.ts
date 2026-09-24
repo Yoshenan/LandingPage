@@ -184,3 +184,4 @@ bot.start((ctx) => {
 });
 
 bot.launch();
+console.log("Bot Launched");
