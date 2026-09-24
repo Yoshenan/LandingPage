@@ -104,7 +104,7 @@ app.use(express.static(publicPath));
 app.use('/dist', express.static(distPath));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(publicPath, 'page.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 // ==========================================
