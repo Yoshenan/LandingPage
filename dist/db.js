@@ -23,7 +23,14 @@ const logSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
     entry: { type: String },
     username: String,
-    companyName: String
+    companyName: String,
+
+
+    client : String,
+    source : String,
+    submittedBy : String,
+    submittedAt : String
+
 });
 export const User = mongoose.model('User', userSchema);
 export const Log = mongoose.model('Log', logSchema);

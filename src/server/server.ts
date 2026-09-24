@@ -1,7 +1,7 @@
 import express, { type Request, type Response, type NextFunction } from 'express';
 import path, { basename } from 'path';
 import bcrypt from 'bcryptjs';
-import { connectDB, User, Log } from './db.js';
+import { connectDB, User, Log,Telegram } from './db.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 
@@ -311,6 +311,53 @@ app.post('/api/logout', requireAuth, (req, res, next) => {
     res.clearCookie('connect.sid');
     return res.status(200).json({ message: 'Logout successful' });
   });
+});
+
+app.post('/api/submission' , async(req,res) => {
+
+  console.log("TELEGRAM POST RECEIVED:", req.body);
+  try{
+    const submission = await Telegram.create(req.body)
+    res.status(201).json(submission);
+  }
+  catch(error){
+    console.error("Telegram submission ",error);
+    res.status(500).json({
+      error : "Failed to save submission"
+    });
+  }
+
+});
+
+
+app.get('/api/submission',async(req,res) => {
+  try{
+    const submission = await Telegram.find();
+    res.status(200).json(submission);
+  }
+  catch(error){
+    console.error('fetch telegram submission',error);
+    res.status(500).json({
+      error : "Failed to fetch telegram submissions"
+
+    });
+
+  }
+
+});
+
+app.delete('/api/submission/:id',async (req, res) => {
+  try {
+    const submission = await Telegram.findByIdAndDelete(req.params.id);
+
+    if (!submission) {
+      return res.status(404).json({ error: 'Submission not found' });
+    }
+    res.status(200).json({ message: 'Submission deleted successfully' });
+  } catch (err) {
+    console.error('telegram delete user error:', err);
+    res.status(500).json({ error: 'Failed to delete submission' });
+  }
 });
 
 // 9. Start Listener

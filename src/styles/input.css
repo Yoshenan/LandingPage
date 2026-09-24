@@ -1,4 +1,106 @@
 @import "tailwindcss";
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 
+/* Light theme */
+
+html.light .bg-slate-950 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-slate-900 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-slate-800 {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .text-slate-200 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-300 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+html.light .bg-gradient-to-r.from-slate-900 {
+  background: #ffffff !important;
+}
+
+html.light .border-slate-800\/80 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .border-slate-800\/60 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .text-emerald-400 {
+  color: #059669 !important;
+}
+
+html.light .text-slate-300 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-400 {
+  color: #64748b !important;
+}
+
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html,
+body,
+div,
+section,
+header,
+main,
+button,
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+span {
+  transition:
+    background-color 300ms ease,
+    color 300ms ease,
+    border-color 300ms ease;
+}
+
+html.light .bg-gradient-to-r.from-slate-900 {
+  background: #ffffff !important;
+}
+
+html.light .text-slate-300 {
+  color: #334155 !important;
+}
+
+html.light .text-slate-400 {
+  color: #475569 !important;
+}
+
+html.light .text-white {
+  color: #0f172a !important;
+}
+
+html.light .border-slate-800\/80,
+html.light .border-slate-800\/60 {
+  border-color: #cbd5e1 !important;
+}
+
+html.light .bg-emerald-500\/10 {
+  background-color: #d1fae5 !important;
+}
+
+html.light .text-emerald-400 {
+  color: #047857 !important;
+}

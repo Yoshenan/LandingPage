@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin - User Management</title>
+  <script>
+  const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme === 'light') {
+    document.documentElement.classList.add('light');
+  }
+</script>
   
   <link href="output.css" rel="stylesheet" />
   <link rel="icon" href="data:,">

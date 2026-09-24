@@ -4,8 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manage Requests</title>
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme === 'light') {
+    document.documentElement.classList.add('light');
+  }
+</script>
+  <link href="output.css" rel="stylesheet" />
+
+ 
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen p-6 md:p-10 font-sans antialiased">
 
@@ -23,7 +31,20 @@
 
     <div id="request-list" class="space-y-3">
     </div>
+
+   <header class="flex justify-between items-center border-b border-emerald-900/50 pb-4">
+    <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></span>
+        <h1 class="text-2xl font-bold tracking-tight text-white">Telegram Request</h1>
+      </div>
+   </header>
+
+    <div id = "telegram-list" class="space-y-3">
+   </div>
+
+
   </div>
+
     
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 

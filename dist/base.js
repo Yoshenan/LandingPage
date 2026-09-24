@@ -10,6 +10,7 @@ const requestForm = document.getElementById('form');
 const eye = document.getElementById('eye-icon');
 const eyeOff = document.getElementById('eye-off-icon');
 const toggle = document.getElementById('toggle-password');
+const list = document.getElementById('telegram-list');
 
 const passwordInputMain = document.getElementById('password') || '';
 
@@ -144,55 +145,135 @@ function renderRequests() {
   if (!requestList) return;
 
   requestList.innerHTML = '';
-  const existingRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
+
+  const existingRequests = JSON.parse(
+    sessionStorage.getItem('requests') || '[]'
+  );
 
   if (existingRequests.length === 0) {
-    requestList.innerHTML = '<p class="text-slate-400 text-sm">No requests found.</p>';
+    requestList.innerHTML =
+      '<p class="text-slate-400 text-sm">No requests found.</p>';
     return;
   }
 
   existingRequests.forEach((item) => {
+
     const container = document.createElement('div');
     container.className = 'space-y-1 request-item';
     container.dataset.org = (item.organization || '').toLowerCase();
 
+    // Request button
     const btn = document.createElement('button');
+
     btn.type = 'button';
+
     btn.className =
       'w-full text-left bg-slate-900 hover:bg-slate-800 border border-emerald-800/60 hover:border-emerald-500/80 p-3 rounded-lg text-emerald-400 font-mono text-sm font-semibold transition';
+
     btn.textContent = item.id || 'REQ-UNKNOWN';
 
+
+    // Details
     const details = document.createElement('div');
+
     details.className =
       'hidden bg-slate-900/60 border border-slate-800 p-3 rounded-lg text-xs space-y-2';
+
     details.innerHTML = `
       <div class="flex justify-between items-center">
-        <p class="text-blue-400 font-semibold">${escapeHtml(item.organization || 'General')}</p>
-        <button 
-          type="button" 
-          class="edit-req-btn text-[11px] bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded transition"
-          data-id="${escapeHtml(item.id || '')}"
-        >
-          Edit
-        </button>
+
+        <p class="text-blue-400 font-semibold">
+          ${escapeHtml(item.organization || 'General')}
+        </p>
+
+        <div class="flex gap-2">
+
+          <button
+            type="button"
+            class="edit-req-btn text-[11px] bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded transition"
+            data-id="${escapeHtml(item.id || '')}"
+          >
+            Edit
+          </button>
+
+          <button
+            type="button"
+            class="delete-req-btn text-[11px] bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 px-2.5 py-1 rounded transition"
+            data-id="${escapeHtml(item.id || '')}"
+          >
+            Delete
+          </button>
+
+        </div>
+
       </div>
-      <p class="text-slate-300 leading-relaxed">${escapeHtml(item.request || 'No details')}</p>
+
+      <p class="text-slate-300 leading-relaxed">
+        ${escapeHtml(item.request || 'No details')}
+      </p>
     `;
 
+
+    // Open / close details
     btn.addEventListener('click', () => {
       details.classList.toggle('hidden');
     });
 
+
+    // Edit
     const editBtn = details.querySelector('.edit-req-btn');
+
     if (editBtn) {
       editBtn.addEventListener('click', (e) => {
+
         e.stopPropagation();
+
         populateFormForEdit(item.id);
+
       });
     }
 
+
+    // Delete
+    const deleteBtn = details.querySelector('.delete-req-btn');
+
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', (e) => {
+
+        e.stopPropagation();
+
+        const confirmed = confirm(
+          `Are you sure you want to delete ${item.id}?`
+        );
+
+        if (!confirmed) return;
+
+
+        // Remove from sessionStorage
+        const updatedRequests = existingRequests.filter(
+          (request) => request.id !== item.id
+        );
+
+        sessionStorage.setItem(
+          'requests',
+          JSON.stringify(updatedRequests)
+        );
+
+
+        // Remove from screen
+        container.remove();
+
+
+        // Show message
+        show_toast(`${item.id} deleted successfully.`);
+
+      });
+    }
+
+
     container.appendChild(btn);
     container.appendChild(details);
+
     requestList.appendChild(container);
   });
 
@@ -358,7 +439,7 @@ loginForm?.addEventListener('submit', async (e) => {
       checkAdminAccess();
       await getLogs();
 
-      switchState('Dashboa');
+      switchState('Dashboard');
       show_toast(`Welcome back, ${usernameInput}!`);
       return;
     } else {
@@ -581,3 +662,151 @@ export function show_toast (message, isError = false) {
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
+
+
+async function getTelegramData() {
+  const response = await fetch('http://localhost:3000/api/submission');
+  const data = await response.json();
+
+  data.forEach((submission) => {
+    const item = document.createElement('div');
+
+    item.className =
+      "bg-gray-800 border border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
+
+    item.innerHTML = `
+      <!-- Header -->
+      <div class="flex items-center justify-between p-3.5">
+
+        <div class="flex items-center gap-2">
+          <span class="bg-blue-500/10 text-blue-400 font-semibold px-2 py-0.5 rounded">
+            TELEGRAM
+          </span>
+
+          <span class="text-gray-400 text-xs">
+            ${new Date(submission.submittedAt).toLocaleString()}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+
+          <button
+            class="toggle-btn text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-700"
+            title="Minimize"
+          >
+            −
+          </button>
+
+          <button
+            class="delete-btn text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-gray-700"
+            title="Delete"
+          >
+            🗑
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="submission-content px-3.5 pb-3.5">
+        <div class="border-t border-gray-700 pt-3 text-gray-300 space-y-1">
+
+          <p>
+            <span class="text-gray-400 font-medium">Client:</span>
+            ${submission.client}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Organization:</span>
+            ${submission.organization}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Full Name:</span>
+            ${submission.fullName}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Email:</span>
+            ${submission.email}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Phone:</span>
+            ${submission.phone}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Environment:</span>
+            ${submission.environment}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Platform:</span>
+            ${submission.platformCategory}
+          </p>
+
+          <p>
+            <span class="text-gray-400 font-medium">Request:</span>
+            ${submission.requestType}
+          </p>
+
+        </div>
+      </div>
+    `;
+
+    // Minimize / maximize
+    const toggleBtn = item.querySelector('.toggle-btn');
+    const content = item.querySelector('.submission-content');
+
+    toggleBtn?.addEventListener('click', () => {
+      if (content?.classList.contains('hidden')) {
+        content?.classList.remove('hidden');
+
+        if (toggleBtn) {
+          toggleBtn.textContent = '−';
+          toggleBtn.setAttribute('title', 'Minimize');
+        }
+
+      } else {
+        content?.classList.add('hidden');
+
+        if (toggleBtn) {
+          toggleBtn.textContent = '+';
+          toggleBtn.setAttribute('title', 'Maximize');
+        }
+      }
+    });
+
+    // Delete
+    const deleteBtn = item.querySelector('.delete-btn');
+
+    deleteBtn?.addEventListener('click', async () => {
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/submission/${submission._id}`,
+          {
+            method: 'DELETE'
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to delete submission');
+        }
+
+        item.remove();
+
+        show_toast('Submission deleted successfully', 'success');
+
+      } catch (error) {
+        console.error('Delete error:', error);
+        show_toast('Failed to delete submission.','error');
+      }
+    });
+
+    list?.append(item);
+  });
+}
+
+getTelegramData();
