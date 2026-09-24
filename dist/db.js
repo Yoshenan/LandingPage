@@ -46,7 +46,7 @@ const telegramSchema = new mongoose.Schema({
 });
 export const User = mongoose.model('User', userSchema);
 export const Log = mongoose.model('Log', logSchema);
-export const Telegram = mongoose.model('Telegram', telegramSchema, 'telegrams');
+export const Telegram = mongoose.model('Telegram', telegramSchema);
 // 4. Database Connection Function
 export const connectDB = async () => {
     try {
