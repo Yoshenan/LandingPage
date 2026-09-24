@@ -641,149 +641,126 @@ export function show_toast (message, isError = false) {
 
 
 async function getTelegramData() {
-  const response = await fetch('/api/submission');
-  const data = await response.json();
+  const list = document.getElementById('telegram-list');
+  if (!list) return;
 
-  data.forEach((submission) => {
-    const item = document.createElement('div');
+  try {
+    const response = await fetch('/api/submission');
+    
+    if (!response.ok) {
+      console.warn('Telegram API response error:', response.status);
+      list.innerHTML = '<p class="text-slate-500 dark:text-gray-400 text-sm p-2">Unable to load submissions.</p>';
+      return;
+    }
 
-    // Light/Dark mode container styling
-    item.className =
-      "bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
+    const data = await response.json();
+    list.innerHTML = ''; // Clear container before rendering
 
-    item.innerHTML = `
-      <!-- Header -->
-      <div class="flex items-center justify-between p-3.5">
+    if (!Array.isArray(data) || data.length === 0) {
+      list.innerHTML = '<p class="text-slate-500 dark:text-gray-400 text-sm p-2">No Telegram submissions found.</p>';
+      return;
+    }
 
-        <div class="flex items-center gap-2">
-          <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded">
-            TELEGRAM
-          </span>
+    data.forEach((submission) => {
+      const item = document.createElement('div');
 
-          <span class="text-slate-500 dark:text-gray-400 text-xs">
-            ${new Date(submission.submittedAt).toLocaleString()}
-          </span>
+      // Tag item with organization data so company filter doesn't hide it
+      item.dataset.org = (submission.organization || submission.client || '').toLowerCase();
+
+      item.className =
+        "bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
+
+      item.innerHTML = `
+        <!-- Header -->
+        <div class="flex items-center justify-between p-3.5">
+          <div class="flex items-center gap-2">
+            <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded">
+              TELEGRAM
+            </span>
+            <span class="text-slate-500 dark:text-gray-400 text-xs">
+              ${submission.submittedAt ? new Date(submission.submittedAt).toLocaleString() : ''}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button
+              class="toggle-btn text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
+              title="Minimize"
+            >
+              −
+            </button>
+            <button
+              class="delete-btn text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
+              title="Delete"
+            >
+              🗑
+            </button>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2">
-
-          <button
-            class="toggle-btn text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
-            title="Minimize"
-          >
-            −
-          </button>
-
-          <button
-            class="delete-btn text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
-            title="Delete"
-          >
-            🗑
-          </button>
-
+        <!-- Content -->
+        <div class="submission-content px-3.5 pb-3.5">
+          <div class="border-t border-slate-200 dark:border-gray-700 pt-3 text-slate-800 dark:text-gray-300 space-y-1">
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Client:</span> ${escapeHtml(submission.client || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Organization:</span> ${escapeHtml(submission.organization || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Full Name:</span> ${escapeHtml(submission.fullName || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Email:</span> ${escapeHtml(submission.email || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Phone:</span> ${escapeHtml(submission.phone || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Environment:</span> ${escapeHtml(submission.environment || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Platform:</span> ${escapeHtml(submission.platformCategory || '')}</p>
+            <p><span class="text-slate-500 dark:text-gray-400 font-medium">Request:</span> ${escapeHtml(submission.requestType || '')}</p>
+          </div>
         </div>
-      </div>
+      `;
 
-      <!-- Content (Theme Aware) -->
-      <div class="submission-content px-3.5 pb-3.5">
-        <div class="border-t border-slate-200 dark:border-gray-700 pt-3 text-slate-800 dark:text-gray-300 space-y-1">
+      // Minimize / maximize toggle
+      const toggleBtn = item.querySelector('.toggle-btn');
+      const content = item.querySelector('.submission-content');
 
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Client:</span>
-            ${escapeHtml(submission.client || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Organization:</span>
-            ${escapeHtml(submission.organization || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Full Name:</span>
-            ${escapeHtml(submission.fullName || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Email:</span>
-            ${escapeHtml(submission.email || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Phone:</span>
-            ${escapeHtml(submission.phone || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Environment:</span>
-            ${escapeHtml(submission.environment || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Platform:</span>
-            ${escapeHtml(submission.platformCategory || '')}
-          </p>
-
-          <p>
-            <span class="text-slate-500 dark:text-gray-400 font-medium">Request:</span>
-            ${escapeHtml(submission.requestType || '')}
-          </p>
-
-        </div>
-      </div>
-    `;
-
-    // Minimize / maximize
-    const toggleBtn = item.querySelector('.toggle-btn');
-    const content = item.querySelector('.submission-content');
-
-    toggleBtn?.addEventListener('click', () => {
-      if (content?.classList.contains('hidden')) {
-        content?.classList.remove('hidden');
-
-        if (toggleBtn) {
-          toggleBtn.textContent = '−';
-          toggleBtn.setAttribute('title', 'Minimize');
-        }
-
-      } else {
-        content?.classList.add('hidden');
-
-        if (toggleBtn) {
-          toggleBtn.textContent = '+';
-          toggleBtn.setAttribute('title', 'Maximize');
-        }
-      }
-    });
-
-    // Delete
-    const deleteBtn = item.querySelector('.delete-btn');
-
-    deleteBtn?.addEventListener('click', async () => {
-
-      try {
-        const response = await fetch(
-          `/api/submission/${submission._id}`,
-          {
-            method: 'DELETE'
+      toggleBtn?.addEventListener('click', () => {
+        if (content?.classList.contains('hidden')) {
+          content?.classList.remove('hidden');
+          if (toggleBtn) {
+            toggleBtn.textContent = '−';
+            toggleBtn.setAttribute('title', 'Minimize');
           }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to delete submission');
+        } else {
+          content?.classList.add('hidden');
+          if (toggleBtn) {
+            toggleBtn.textContent = '+';
+            toggleBtn.setAttribute('title', 'Maximize');
+          }
         }
+      });
 
-        item.remove();
+      // Delete handler
+      const deleteBtn = item.querySelector('.delete-btn');
+      deleteBtn?.addEventListener('click', async () => {
+        try {
+          const response = await fetch(`/api/submission/${submission._id}`, {
+            method: 'DELETE'
+          });
 
-        show_toast('Submission deleted successfully');
+          if (!response.ok) throw new Error('Failed to delete submission');
 
-      } catch (error) {
-        console.error('Delete error:', error);
-        show_toast('Failed to delete submission.', true);
-      }
+          item.remove();
+          show_toast('Submission deleted successfully');
+        } catch (error) {
+          console.error('Delete error:', error);
+          show_toast('Failed to delete submission.', true);
+        }
+      });
+
+      list.append(item);
     });
 
-    list?.append(item);
-  });
+    // Re-apply filter rules after loading
+    autoFilterByActiveCompany();
+
+  } catch (error) {
+    console.error('Fetch error:', error);
+    list.innerHTML = '<p class="text-rose-500 text-sm p-2">Error connecting to submission service.</p>';
+  }
 }
 
 getTelegramData();
