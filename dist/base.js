@@ -160,7 +160,7 @@ function renderRequests() {
     container.className = 'space-y-1 request-item mb-3';
     container.dataset.org = (item.organization || '').toLowerCase();
 
-    // Request card / button container (Theme Aware)
+    // Request button (With dark mode background)
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className =
@@ -168,10 +168,10 @@ function renderRequests() {
 
     btn.textContent = item.id || 'REQ-UNKNOWN';
 
-    // Details container (Theme Aware)
+    // Details container (With dark mode background)
     const details = document.createElement('div');
     details.className =
-      'hidden bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+      'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
 
     details.innerHTML = `
       <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
@@ -203,12 +203,12 @@ function renderRequests() {
       </p>
     `;
 
-    // Open / close details
+    // Toggle details
     btn.addEventListener('click', () => {
       details.classList.toggle('hidden');
     });
 
-    // Edit
+    // Edit handler
     const editBtn = details.querySelector('.edit-req-btn');
     if (editBtn) {
       editBtn.addEventListener('click', (e) => {
@@ -217,7 +217,7 @@ function renderRequests() {
       });
     }
 
-    // Delete
+    // Delete handler
     const deleteBtn = details.querySelector('.delete-req-btn');
     if (deleteBtn) {
       deleteBtn.addEventListener('click', (e) => {
@@ -229,7 +229,6 @@ function renderRequests() {
 
         if (!confirmed) return;
 
-        // Remove from sessionStorage
         const updatedRequests = existingRequests.filter(
           (request) => request.id !== item.id
         );
@@ -239,10 +238,7 @@ function renderRequests() {
           JSON.stringify(updatedRequests)
         );
 
-        // Remove from screen
         container.remove();
-
-        // Show message
         show_toast(`${item.id} deleted successfully.`);
       });
     }
@@ -255,6 +251,8 @@ function renderRequests() {
 
   autoFilterByActiveCompany();
 }
+
+
 
 function checkAdminAccess() {
   const userRole = sessionStorage.getItem('user_role');
@@ -656,12 +654,13 @@ async function getTelegramData() {
     data.forEach((submission) => {
       const item = document.createElement('div');
 
+      // Added explicit dark mode background and border colors here
       item.className =
-        'bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 rounded-lg mb-3 shadow-sm text-sm overflow-hidden';
+        'bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg mb-3 shadow-sm text-sm overflow-hidden';
 
       item.innerHTML = `
         <!-- Header -->
-        <div class="flex items-center justify-between p-3.5 bg-slate-200/50 dark:bg-slate-900 border-b border-slate-300 dark:border-slate-800">
+        <div class="flex items-center justify-between p-3.5 bg-slate-200/50 dark:bg-slate-800/80 border-b border-slate-300 dark:border-slate-700">
 
           <div class="flex items-center gap-2">
             <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded text-xs">
@@ -676,7 +675,7 @@ async function getTelegramData() {
           <div class="flex items-center gap-2">
             <button
               type="button"
-              class="toggle-btn text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-300 dark:hover:bg-slate-800 transition"
+              class="toggle-btn text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-300 dark:hover:bg-slate-700 transition"
               title="Minimize"
             >
               −
@@ -705,7 +704,7 @@ async function getTelegramData() {
         </div>
       `;
 
-      // Minimize / maximize
+      // Minimize / maximize handlers
       const toggleBtn = item.querySelector('.toggle-btn');
       const content = item.querySelector('.submission-content');
 
@@ -725,7 +724,7 @@ async function getTelegramData() {
         }
       });
 
-      // Delete
+      // Delete handler
       const deleteBtn = item.querySelector('.delete-btn');
       deleteBtn?.addEventListener('click', async () => {
         try {
@@ -751,5 +750,4 @@ async function getTelegramData() {
     console.error('Error loading Telegram data:', err);
   }
 }
-
 getTelegramData();
