@@ -104,17 +104,16 @@ function checkPendingEditMode() {
       const hiddenIdInput = document.getElementById('edit-request-id');
       if (hiddenIdInput) hiddenIdInput.value = editingId;
 
-
       const form_title = document.getElementById('form-title');
       const subtitle = document.getElementById('form-subtitle');
       const back = document.getElementById('form-back');
 
-      if(form_title){
+      if (form_title) {
         form_title.textContent = `Edit Request (${editingId})`;
         form_title.classList.replace('text-emerald-400', 'text-amber-400');
       }
 
-      if(subtitle){
+      if (subtitle) {
         subtitle.textContent = 'Modify the details below and save your changes.';
       }
       if (back) back.classList.add('hidden');
@@ -152,45 +151,38 @@ function renderRequests() {
 
   if (existingRequests.length === 0) {
     requestList.innerHTML =
-      '<p class="text-slate-400 text-sm">No requests found.</p>';
+      '<p class="text-slate-500 dark:text-slate-400 text-sm">No requests found.</p>';
     return;
   }
 
   existingRequests.forEach((item) => {
-
     const container = document.createElement('div');
     container.className = 'space-y-1 request-item';
     container.dataset.org = (item.organization || '').toLowerCase();
 
-    // Request button
+    // Request button (Theme Aware)
     const btn = document.createElement('button');
-
     btn.type = 'button';
-
     btn.className =
-      'w-full text-left bg-slate-900 hover:bg-slate-800 border border-emerald-800/60 hover:border-emerald-500/80 p-3 rounded-lg text-emerald-400 font-mono text-sm font-semibold transition';
+      'w-full text-left bg-slate-100 hover:bg-slate-200 text-emerald-600 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-emerald-800/60 dark:hover:border-emerald-500/80 p-3 rounded-lg dark:text-emerald-400 font-mono text-sm font-semibold transition';
 
     btn.textContent = item.id || 'REQ-UNKNOWN';
 
-
-    // Details
+    // Details container (Theme Aware)
     const details = document.createElement('div');
-
     details.className =
-      'hidden bg-slate-900/60 border border-slate-800 p-3 rounded-lg text-xs space-y-2';
+      'hidden bg-slate-100/80 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 p-3 rounded-lg text-xs space-y-2';
 
     details.innerHTML = `
       <div class="flex justify-between items-center">
-
-        <p class="text-blue-400 font-semibold">
+        <p class="text-blue-600 dark:text-blue-400 font-semibold">
           ${escapeHtml(item.organization || 'General')}
         </p>
 
         <div class="flex gap-2">
-
           <button
             type="button"
-            class="edit-req-btn text-[11px] bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded transition"
+            class="edit-req-btn text-[11px] bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 px-2.5 py-1 rounded transition"
             data-id="${escapeHtml(item.id || '')}"
           >
             Edit
@@ -198,48 +190,37 @@ function renderRequests() {
 
           <button
             type="button"
-            class="delete-req-btn text-[11px] bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30 px-2.5 py-1 rounded transition"
+            class="delete-req-btn text-[11px] bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 border border-red-500/30 px-2.5 py-1 rounded transition"
             data-id="${escapeHtml(item.id || '')}"
           >
             Delete
           </button>
-
         </div>
-
       </div>
 
-      <p class="text-slate-300 leading-relaxed">
+      <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
         ${escapeHtml(item.request || 'No details')}
       </p>
     `;
-
 
     // Open / close details
     btn.addEventListener('click', () => {
       details.classList.toggle('hidden');
     });
 
-
     // Edit
     const editBtn = details.querySelector('.edit-req-btn');
-
     if (editBtn) {
       editBtn.addEventListener('click', (e) => {
-
         e.stopPropagation();
-
         populateFormForEdit(item.id);
-
       });
     }
 
-
     // Delete
     const deleteBtn = details.querySelector('.delete-req-btn');
-
     if (deleteBtn) {
       deleteBtn.addEventListener('click', (e) => {
-
         e.stopPropagation();
 
         const confirmed = confirm(
@@ -247,7 +228,6 @@ function renderRequests() {
         );
 
         if (!confirmed) return;
-
 
         // Remove from sessionStorage
         const updatedRequests = existingRequests.filter(
@@ -259,17 +239,13 @@ function renderRequests() {
           JSON.stringify(updatedRequests)
         );
 
-
         // Remove from screen
         container.remove();
 
-
         // Show message
         show_toast(`${item.id} deleted successfully.`);
-
       });
     }
-
 
     container.appendChild(btn);
     container.appendChild(details);
@@ -482,13 +458,13 @@ async function getLogs() {
   auditContainer.innerHTML = '';
 
   if (!Array.isArray(logs) || logs.length === 0) {
-    auditContainer.innerHTML = '<p class="text-slate-400 text-sm">No logs yet</p>';
+    auditContainer.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No logs yet</p>';
     return;
   }
 
   logs.forEach((log) => {
     const logItem = document.createElement('div');
-    logItem.className = 'py-1 border-b border-slate-700/50 text-xs font-mono text-slate-300';
+    logItem.className = 'py-1 border-b border-slate-200 dark:border-slate-700/50 text-xs font-mono text-slate-700 dark:text-slate-300';
 
     if (typeof log === 'string') {
       logItem.textContent = log;
@@ -512,7 +488,7 @@ requestForm?.addEventListener('submit', async (e) => {
   const fullName = document.getElementById('name')?.value.trim() || '';
   const email = document.getElementById('email')?.value.trim() || '';
   const num = document.getElementById('phone-num')?.value.trim() || '';
-  
+
   const selectedOrg = document.querySelector('input[name="organization"]:checked')?.value;
   const environmentDetails = document.querySelector('input[name="environment"]:checked')?.value;
   const platForm = document.querySelector('input[name="platform_category"]:checked')?.value;
@@ -536,15 +512,15 @@ requestForm?.addEventListener('submit', async (e) => {
   const editingId = requestForm.dataset.editingId || document.getElementById('edit-request-id')?.value || null;
   const isEditing = Boolean(editingId);
 
-  const payload = { 
-    fullName, 
-    email, 
-    company, 
-    environmentDetails, 
-    platForm, 
-    Req, 
-    num, 
-    organization: selectedOrg 
+  const payload = {
+    fullName,
+    email,
+    company,
+    environmentDetails,
+    platForm,
+    Req,
+    num,
+    organization: selectedOrg
   };
 
   try {
@@ -654,8 +630,8 @@ export function show_toast (message, isError = false) {
 
   toast.className = `px-4 py-3 rounded-lg border text-xs font-medium shadow-xl pointer-events-auto transition-all duration-300 ${
     isError
-      ? 'bg-rose-950/90 border-rose-500/40 text-rose-300'
-      : 'bg-emerald-950/90 border-emerald-500/40 text-emerald-300'
+      ? 'bg-rose-100 dark:bg-rose-950/90 border-rose-300 dark:border-rose-500/40 text-rose-800 dark:text-rose-300'
+      : 'bg-emerald-100 dark:bg-emerald-950/90 border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300'
   }`;
   toast.textContent = message;
 
@@ -671,19 +647,20 @@ async function getTelegramData() {
   data.forEach((submission) => {
     const item = document.createElement('div');
 
+    // Light/Dark mode container styling
     item.className =
-      "bg-gray-800 border border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
+      "bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
 
     item.innerHTML = `
       <!-- Header -->
       <div class="flex items-center justify-between p-3.5">
 
         <div class="flex items-center gap-2">
-          <span class="bg-blue-500/10 text-blue-400 font-semibold px-2 py-0.5 rounded">
+          <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded">
             TELEGRAM
           </span>
 
-          <span class="text-gray-400 text-xs">
+          <span class="text-slate-500 dark:text-gray-400 text-xs">
             ${new Date(submission.submittedAt).toLocaleString()}
           </span>
         </div>
@@ -691,14 +668,14 @@ async function getTelegramData() {
         <div class="flex items-center gap-2">
 
           <button
-            class="toggle-btn text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-700"
+            class="toggle-btn text-slate-600 hover:text-slate-900 dark:text-gray-400 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
             title="Minimize"
           >
             −
           </button>
 
           <button
-            class="delete-btn text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-gray-700"
+            class="delete-btn text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-gray-700 transition"
             title="Delete"
           >
             🗑
@@ -707,48 +684,48 @@ async function getTelegramData() {
         </div>
       </div>
 
-      <!-- Content -->
+      <!-- Content (Theme Aware) -->
       <div class="submission-content px-3.5 pb-3.5">
-        <div class="border-t border-gray-700 pt-3 text-gray-300 space-y-1">
+        <div class="border-t border-slate-200 dark:border-gray-700 pt-3 text-slate-800 dark:text-gray-300 space-y-1">
 
           <p>
-            <span class="text-gray-400 font-medium">Client:</span>
-            ${submission.client}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Client:</span>
+            ${escapeHtml(submission.client || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Organization:</span>
-            ${submission.organization}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Organization:</span>
+            ${escapeHtml(submission.organization || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Full Name:</span>
-            ${submission.fullName}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Full Name:</span>
+            ${escapeHtml(submission.fullName || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Email:</span>
-            ${submission.email}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Email:</span>
+            ${escapeHtml(submission.email || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Phone:</span>
-            ${submission.phone}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Phone:</span>
+            ${escapeHtml(submission.phone || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Environment:</span>
-            ${submission.environment}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Environment:</span>
+            ${escapeHtml(submission.environment || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Platform:</span>
-            ${submission.platformCategory}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Platform:</span>
+            ${escapeHtml(submission.platformCategory || '')}
           </p>
 
           <p>
-            <span class="text-gray-400 font-medium">Request:</span>
-            ${submission.requestType}
+            <span class="text-slate-500 dark:text-gray-400 font-medium">Request:</span>
+            ${escapeHtml(submission.requestType || '')}
           </p>
 
         </div>
@@ -797,11 +774,11 @@ async function getTelegramData() {
 
         item.remove();
 
-        show_toast('Submission deleted successfully', 'success');
+        show_toast('Submission deleted successfully');
 
       } catch (error) {
         console.error('Delete error:', error);
-        show_toast('Failed to delete submission.','error');
+        show_toast('Failed to delete submission.', true);
       }
     });
 
