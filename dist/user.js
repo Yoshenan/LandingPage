@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function buildRowContent(user) {
     const roleBadgeClass = user.role === 'Admin'
-      ? 'bg-blue-900/50 text-blue-300 border border-blue-700/50'
-      : 'bg-emerald-900/40 text-emerald-300 border border-emerald-700/50';
+      ? 'bg-blue-900/50 text-white border border-blue-700/50'
+      : 'bg-emerald-900/40 text-white border border-emerald-700/50';
 
     const rawUsername = user.username || '';
     const rawCompany = user.companyName || user.company || '';
