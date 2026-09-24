@@ -1,362 +1,785 @@
+
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forms Portal</title>
+
+  <!-- Load saved theme before page renders -->
   <script>
-  const savedTheme = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme');
 
-  if (savedTheme === 'light') {
-    document.documentElement.classList.add('light');
-  }
-</script>
+    if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
   <link href="output.css" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen antialiased relative">
+
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen antialiased relative">
 
   <!-- LOGIN VIEW -->
-  <section id="login-view" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 p-4">
-    <div class="w-full max-w-md p-8 bg-slate-900 rounded-xl shadow-2xl border border-slate-800">
+  <section
+    id="login-view"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-4"
+  >
+    <div
+      class="w-full max-w-md p-8 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800"
+    >
       <div class="mb-6">
-        <h2 class="text-2xl font-bold text-white tracking-tight">Sign In</h2>
-        <p class="text-xs text-slate-400 mt-1">Enter your credentials to access your portal</p>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          Sign In
+        </h2>
+
+        <p class="text-xs text-slate-600 dark:text-slate-400 mt-1">
+          Enter your credentials to access your portal
+        </p>
       </div>
 
       <form id="login-form" class="space-y-4">
+
+        <!-- Email -->
         <div>
-          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Email</label>
-          <input 
+          <label
+            class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5"
+          >
+            Email
+          </label>
+
+          <input
             type="text"
             id="username"
-            class="w-full px-3.5 py-2.5 bg-slate-950 text-white rounded-lg border border-slate-800 focus:outline-none focus:border-emerald-500 text-sm transition"
+            class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-lg border border-slate-300 dark:border-slate-800 focus:outline-none focus:border-emerald-500 text-sm transition"
             required
           />
         </div>
 
+        <!-- Password -->
         <div>
-  <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Password</label>
-  
-  <!-- Relative wrapper -->
-  <div class="relative flex items-center">
-    <input
-      type="password"
-      id="password"
-      class="w-full px-3.5 py-2.5 pr-10 bg-slate-950 text-white rounded-lg border border-slate-800 focus:outline-none focus:border-emerald-500 text-sm transition"
-      required
-    />
+          <label
+            class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5"
+          >
+            Password
+          </label>
 
-    <!-- Absolutely positioned eye button -->
-    <button
-      type="button"
-      id="toggle-password"
-      aria-label="Toggle password visibility"
-      class="absolute right-3.5 text-slate-500 hover:text-emerald-400 focus:outline-none transition-colors"
-    >
-      <!-- Eye Icon (Show) -->
-      <svg id="eye-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-      </svg>
-      
-      <!-- Eye-Off Icon (Hide) -->
-      <svg id="eye-off-icon" class="w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.982 8.982 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21M3 3l18 18" />
-      </svg>
-    </button>
-  </div>
-</div>
+          <div class="relative flex items-center">
 
+            <input
+              type="password"
+              id="password"
+              class="w-full px-3.5 py-2.5 pr-10 bg-white dark:bg-slate-950 text-slate-800 dark:text-white rounded-lg border border-slate-300 dark:border-slate-800 focus:outline-none focus:border-emerald-500 text-sm transition"
+              required
+            />
 
+            <button
+              type="button"
+              id="toggle-password"
+              aria-label="Toggle password visibility"
+              class="absolute right-3.5 text-slate-500 dark:text-slate-500 hover:text-emerald-600 dark:hover:text-emerald-400 focus:outline-none transition-colors"
+            >
 
+              <!-- Eye -->
+              <svg
+                id="eye-icon"
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                />
+              </svg>
+
+              <!-- Eye Off -->
+              <svg
+                id="eye-off-icon"
+                class="w-4 h-4 hidden"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858-5.908A8.982 8.982 0 0112 5c4.478 0 8.268 2.943 9.542 7 10.025 5.411m0 0L21 21M3 3l18 18"
+                />
+              </svg>
+
+            </button>
+          </div>
+        </div>
+
+        <!-- Login -->
         <button
           type="submit"
-          class="w-full mt-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-2.5 rounded-lg transition text-sm">
+          class="w-full mt-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold py-2.5 rounded-lg transition text-sm"
+        >
           Sign In
         </button>
+
       </form>
     </div>
   </section>
 
 
   <!-- DASHBOARD / AUDIT VIEW -->
-  <main id="dashboard-view" class="hidden min-h-screen p-8 space-y-6 transition-all duration-300 ml-[11rem] w-[calc(100%-11rem)]">
-    <div class="flex justify-between items-center bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-lg">
+  <main
+    id="dashboard-view"
+    class="hidden min-h-screen p-8 space-y-6 transition-all duration-300 ml-[11rem] w-[calc(100%-11rem)]"
+  >
+
+    <!-- Workspace Header -->
+    <div
+      class="flex justify-between items-center bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-lg"
+    >
+
       <div>
-        <span class="text-xs font-medium text-emerald-400 uppercase tracking-wider">Active Workspace</span>
-        <h1 id="company-name" class="text-xl font-bold text-white mt-0.5">TEST COMPANY</h1>
-      </div>
+        <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+          Active Workspace
+        </span>
 
-        <button
-        id="logout-btn"
-        class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg border border-slate-700 transition text-xs font-medium">
-        Logout
-      
-    </div>
-
-    <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-lg">
-      <h2 class="text-sm font-semibold text-white uppercase tracking-wider mb-3">Activity Logs</h2>
-      <div id="company-logs" class="space-y-2 text-slate-400 font-mono text-xs">
-        <!-- Logs dynamically rendered here -->
-      </div>
-    </div>
-  </main>
-
-  <!-- QUICK ACTIONS -->
-  <main id="click-box" class="ml-[11rem] w-[calc(100%-11rem)] p-6 lg:p-12 space-y-10 min-h-screen transition-all duration-300">
-    
-    <!-- HEADER BAR -->
-    <header class="flex justify-between items-center pb-6 border-b border-slate-800">
-      <div>
-        <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Forms Portal</span>
-        <h1 class="text-2xl font-bold text-white tracking-tight mt-1">
-          Welcome to <span id="company-name" class="company-field text-emerald-400">Your Workspace</span>
+        <h1
+          id="company-name"
+          class="text-xl font-bold text-slate-900 dark:text-white mt-0.5"
+        >
+          TEST COMPANY
         </h1>
       </div>
 
-      <div class = "flex items-center gap-2">
-        <button id = "theme-toggle" type="button">🌙</button>
-      
-      <button id="quick-logout-btn" class="bg-slate-900 hover:bg-slate-800 text-slate-300 px-4 py-2 rounded-lg border border-slate-800 hover:border-slate-700 transition text-xs font-medium shadow-sm">
+      <button
+        id="logout-btn"
+        class="bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 transition text-xs font-medium"
+      >
         Logout
       </button>
+
     </div>
+
+    <!-- Activity Logs -->
+    <div
+      class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-lg"
+    >
+
+      <h2 class="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
+        Activity Logs
+      </h2>
+
+      <div
+        id="company-logs"
+        class="space-y-2 text-slate-600 dark:text-slate-400 font-mono text-xs"
+      >
+        <!-- Logs dynamically rendered here -->
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- QUICK ACTIONS -->
+  <main
+    id="click-box"
+    class="ml-[11rem] w-[calc(100%-11rem)] p-6 lg:p-12 space-y-10 min-h-screen transition-all duration-300"
+  >
+
+    <!-- HEADER BAR -->
+    <header
+      class="flex justify-between items-center pb-6 border-b border-slate-200 dark:border-slate-800"
+    >
+
+      <div>
+
+        <span class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+          Forms Portal
+        </span>
+
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight mt-1">
+          Welcome to
+          <span
+            id="company-name"
+            class="company-field text-emerald-600 dark:text-emerald-400"
+          >
+            Your Workspace
+          </span>
+        </h1>
+
+      </div>
+
+      <div class="flex items-center gap-2">
+
+        <button
+          id="theme-toggle"
+          type="button"
+          class="px-2 py-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-800 transition"
+          aria-label="Toggle theme"
+        >
+          🌙
+        </button>
+
+        <button
+          id="quick-logout-btn"
+          class="bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition text-xs font-medium shadow-sm"
+        >
+          Logout
+        </button>
+
+      </div>
+
     </header>
 
-    <!-- LANDING PAGE EXPLANATION / HERO SECTION -->
- <!-- LANDING PAGE EXPLANATION / HERO SECTION -->
-<section class="bg-slate-100 dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xl space-y-4">
-  <div class="max-w-3xl space-y-2">
-    <h2 class="text-xl font-semibold text-emerald-600 dark:text-emerald-400">
-      What is the Forms Portal?
-    </h2>
 
-    <p class="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed">
-      The <strong>Forms Portal</strong> is your all-in-one hub for creating, submitting, and reviewing requests. Whether you need to fill out a new form, verify pending requests from team members, manage user access, or contact support. Everything is managed right from this dashboard.
-    </p>
-  </div>
+    <!-- EXPLANATION -->
+    <section
+      class="bg-white dark:bg-slate-900 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xl space-y-4"
+    >
 
-  <!-- Quick Steps / Explanation Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800/60">
+      <div class="max-w-3xl space-y-2">
 
-    <div class="flex items-start space-x-3">
-      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-        1
-      </span>
+        <h2 class="text-xl font-semibold text-emerald-600 dark:text-emerald-400">
+          What is the Forms Portal?
+        </h2>
 
-      <div>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
-          Submit Forms
-        </h4>
-        <p class="text-[11px] text-slate-700 dark:text-slate-400">
-          Fill out and send request forms easily.
+        <p class="text-slate-800 dark:text-slate-200 text-sm md:text-base leading-relaxed">
+          The <strong>Forms Portal</strong> is your all-in-one hub for creating,
+          submitting, and reviewing requests. Whether you need to fill out a new
+          form, verify pending requests from team members, manage user access,
+          or contact support. Everything is managed right from this dashboard.
         </p>
-      </div>
-    </div>
 
-    <div class="flex items-start space-x-3">
-      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-        2
-      </span>
-
-      <div>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
-          Review & Verify
-        </h4>
-        <p class="text-[11px] text-slate-700 dark:text-slate-400">
-          Check and approve incoming requests.
-        </p>
-      </div>
-    </div>
-
-    <div class="flex items-start space-x-3">
-      <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-        3
-      </span>
-
-      <div>
-        <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
-          Manage & Support
-        </h4>
-        <p class="text-[11px] text-slate-700 dark:text-slate-400">
-          Control user roles or reach out for help.
-        </p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-    <!-- QUICK ACTIONS SECTION -->
-    <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-semibold text-slate-200">Quick Actions</h3>
-        <span class="text-xs text-slate-400">Select an action to continue</span>
       </div>
 
-      <!-- 4-Column Responsive Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <!-- Action 1: Fill Request Form -->
-        <a href="forms.html" class="group block h-full">
-          <div data-action="Form Opened" class="log-box relative bg-slate-900 hover:bg-slate-850 p-5 rounded-xl border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5">
-            <div>
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
-                📝
-              </div>
-              <h3 class="text-sm font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">Fill Request Form</h3>
-              <p class="text-xs text-slate-400 leading-relaxed">Create and submit a new request form into the system.</p>
-            </div>
-            <div class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-400">
-              <span>Start Form</span>
-              <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-            </div>
-          </div>
-        </a>
+      <!-- QUICK STEPS -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-200 dark:border-slate-800/60"
+      >
 
-        <!-- Action 2: Verify Form -->
-        <a href="request.html" class="group block h-full">
-          <div data-action="Forms Verified" class="log-box relative bg-slate-900 hover:bg-slate-850 p-5 rounded-xl border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5">
-            <div>
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
-                ✅
-              </div>
-              <h3 class="text-sm font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">Verify Form</h3>
-              <p class="text-xs text-slate-400 leading-relaxed">Review and verify pending user submission requests.</p>
-            </div>
-            <div class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-400">
-              <span>View Requests</span>
-              <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-            </div>
-          </div>
-        </a>
+        <!-- Step 1 -->
+        <div class="flex items-start space-x-3">
 
-        <!-- Action 3: Manage Users -->
-        <a id="manage-user-card" href="userManage.html" class="group block h-full">
-          <div data-action="Managing Users" class="log-box relative bg-slate-900 hover:bg-slate-850 p-5 rounded-xl border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5">
-            <div>
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
-                👥
-              </div>
-              <h3 class="text-sm font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">Manage Users</h3>
-              <p class="text-xs text-slate-400 leading-relaxed">Monitor user activity, permissions, and account statuses.</p>
-            </div>
-            <div class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-400">
-              <span>Manage Accounts</span>
-              <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
-            </div>
-          </div>
-        </a>
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold"
+          >
+            1
+          </span>
 
-        <!-- Action 4: Contact Support -->
-        <div data-action="Contacted Support" class="log-box cursor-pointer group relative bg-slate-900 hover:bg-slate-850 p-5 rounded-xl border border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5">
           <div>
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-400 group-hover:scale-110 transition-transform">
-              🎧
-            </div>
-            <h3 class="text-sm font-semibold text-white mb-1 group-hover:text-emerald-400 transition-colors">Contact Support</h3>
-            <p class="text-xs text-slate-400 leading-relaxed">Get assistance or report issues to the support team.</p>
+
+            <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
+              Submit Forms
+            </h4>
+
+            <p class="text-[11px] text-slate-700 dark:text-slate-400">
+              Fill out and send request forms easily.
+            </p>
+
           </div>
-          <div class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-400">
-            <span>Get Help</span>
-            <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+
+        </div>
+
+
+        <!-- Step 2 -->
+        <div class="flex items-start space-x-3">
+
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold"
+          >
+            2
+          </span>
+
+          <div>
+
+            <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
+              Review & Verify
+            </h4>
+
+            <p class="text-[11px] text-slate-700 dark:text-slate-400">
+              Check and approve incoming requests.
+            </p>
+
           </div>
+
+        </div>
+
+
+        <!-- Step 3 -->
+        <div class="flex items-start space-x-3">
+
+          <span
+            class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold"
+          >
+            3
+          </span>
+
+          <div>
+
+            <h4 class="text-xs font-bold text-slate-900 dark:text-slate-200">
+              Manage & Support
+            </h4>
+
+            <p class="text-[11px] text-slate-700 dark:text-slate-400">
+              Control user roles or reach out for help.
+            </p>
+
+          </div>
+
         </div>
 
       </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+    <section class="space-y-4">
+
+      <div class="flex items-center justify-between">
+
+        <h3 class="text-base font-semibold text-slate-900 dark:text-slate-200">
+          Quick Actions
+        </h3>
+
+        <span class="text-xs text-slate-500 dark:text-slate-400">
+          Select an action to continue
+        </span>
+
+      </div>
+
+
+      <!-- CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- Fill Request Form -->
+        <a href="forms.html" class="group block h-full">
+
+          <div
+            data-action="Form Opened"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+          >
+
+            <div>
+
+              <div
+                class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
+              >
+                📝
+              </div>
+
+              <h3
+                class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+              >
+                Fill Request Form
+              </h3>
+
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Create and submit a new request form into the system.
+              </p>
+
+            </div>
+
+            <div
+              class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              <span>Start Form</span>
+              <span class="group-hover:translate-x-1 transition-transform">
+                &rarr;
+              </span>
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- Verify Form -->
+        <a href="request.html" class="group block h-full">
+
+          <div
+            data-action="Forms Verified"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+          >
+
+            <div>
+
+              <div
+                class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
+              >
+                ✅
+              </div>
+
+              <h3
+                class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+              >
+                Verify Form
+              </h3>
+
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Review and verify pending user submission requests.
+              </p>
+
+            </div>
+
+            <div
+              class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              <span>View Requests</span>
+              <span class="group-hover:translate-x-1 transition-transform">
+                &rarr;
+              </span>
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- Manage Users -->
+        <a
+          id="manage-user-card"
+          href="userManage.html"
+          class="group block h-full"
+        >
+
+          <div
+            data-action="Managing Users"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+          >
+
+            <div>
+
+              <div
+                class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
+              >
+                👥
+              </div>
+
+              <h3
+                class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+              >
+                Manage Users
+              </h3>
+
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Monitor user activity, permissions, and account statuses.
+              </p>
+
+            </div>
+
+            <div
+              class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              <span>Manage Accounts</span>
+              <span class="group-hover:translate-x-1 transition-transform">
+                &rarr;
+              </span>
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- Contact Support -->
+        <div
+          data-action="Contacted Support"
+          class="log-box cursor-pointer group relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+        >
+
+          <div>
+
+            <div
+              class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
+            >
+              🎧
+            </div>
+
+            <h3
+              class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+            >
+              Contact Support
+            </h3>
+
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Get assistance or report issues to the support team.
+            </p>
+
+          </div>
+
+          <div
+            class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+          >
+            <span>Get Help</span>
+
+            <span class="group-hover:translate-x-1 transition-transform">
+              &rarr;
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
     </section>
 
   </main>
 
 
-  <!-- SIDE NAVIGATION (RETRACTABLE) -->
+  <!-- SIDE NAVIGATION -->
   <section id="side-nav" class="hidden">
-    <aside id="sidebar-container" class="fixed top-0 left-0 h-screen bg-slate-900 text-slate-200 p-4 z-40 border-r border-slate-800 flex flex-col justify-between shadow-2xl transition-all duration-300 overflow-hidden w-[11rem]">
-      
+
+    <aside
+      id="sidebar-container"
+      class="fixed top-0 left-0 h-screen bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 p-4 z-40 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-2xl transition-all duration-300 overflow-hidden w-[11rem]"
+    >
+
       <div class="space-y-4">
-        <!-- Top Toggle Bar -->
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800/80 gap-2">
-          <span id="sidebar-title" class="text-xs font-bold uppercase tracking-widest text-emerald-400 truncate">Menu</span>
-          <button id="sidebar-toggle-btn" title="Toggle Sidebar" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-xs flex items-center justify-center shrink-0">
-            <svg id="toggle-icon" class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+
+        <!-- Toggle Bar -->
+        <div
+          class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800/80 gap-2"
+        >
+
+          <span
+            id="sidebar-title"
+            class="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 truncate"
+          >
+            Menu
+          </span>
+
+          <button
+            id="sidebar-toggle-btn"
+            title="Toggle Sidebar"
+            class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition text-xs flex items-center justify-center shrink-0"
+          >
+
+            <svg
+              id="toggle-icon"
+              class="w-4 h-4 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+              ></path>
+
             </svg>
+
           </button>
+
         </div>
 
-        <!-- Navigation Links -->
+
+        <!-- Navigation -->
         <nav class="space-y-1.5">
-          <a id="home-btn" href="#click-box" class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden">
-            <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+
+          <a
+            id="home-btn"
+            href="#click-box"
+            class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden"
+          >
+
+            <svg
+              class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+
             </svg>
+
             <span class="nav-text truncate">Home</span>
+
           </a>
-          <a id="audit-btn" href="#dashboard-view" class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden">
-            <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+
+
+          <a
+            id="audit-btn"
+            href="#dashboard-view"
+            class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden"
+          >
+
+            <svg
+              class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              ></path>
+
             </svg>
+
             <span class="nav-text truncate">Audit Logs</span>
+
           </a>
+
         </nav>
+
       </div>
 
     </aside>
+
   </section>
 
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Toast -->
+  <div
+    id="toast-container"
+    class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"
+  ></div>
 
 
-  <!-- Safe Sidebar Toggle Script -->
+  <!-- Theme + Sidebar Logic -->
   <script>
+
+    // =========================
+    // THEME TOGGLE
+    // =========================
+
     const mode = document.getElementById('theme-toggle');
-     mode?.addEventListener('click',() => {
-      const isLight = document.documentElement.classList.toggle('light');
-      localStorage.setItem('theme' , isLight ? "light":"dark");
-      mode.textContent = isLight ? '🌙' : '☀️';
 
-     });
+    function updateThemeButton() {
+      if (!mode) return;
 
-   
+      const isDark =
+        document.documentElement.classList.contains('dark');
+
+      mode.textContent = isDark ? '🌙' : '☀️';
+    }
+
+    updateThemeButton();
+
+    mode?.addEventListener('click', () => {
+
+      const isDark =
+        document.documentElement.classList.toggle('dark');
+
+      localStorage.setItem(
+        'theme',
+        isDark ? 'dark' : 'light'
+      );
+
+      updateThemeButton();
+    });
+
+
+    // =========================
+    // SIDEBAR TOGGLE
+    // =========================
+
     document.addEventListener('DOMContentLoaded', () => {
-      const toggleBtn = document.getElementById('sidebar-toggle-btn');
-      const sidebar = document.getElementById('sidebar-container');
-      const clickBox = document.getElementById('click-box');
-      const dashboardView = document.getElementById('dashboard-view');
-      const toggleIcon = document.getElementById('toggle-icon');
-      const navTexts = document.querySelectorAll('.nav-text');
-      const sidebarTitle = document.getElementById('sidebar-title');
+
+      const toggleBtn =
+        document.getElementById('sidebar-toggle-btn');
+
+      const sidebar =
+        document.getElementById('sidebar-container');
+
+      const clickBox =
+        document.getElementById('click-box');
+
+      const dashboardView =
+        document.getElementById('dashboard-view');
+
+      const toggleIcon =
+        document.getElementById('toggle-icon');
+
+      const navTexts =
+        document.querySelectorAll('.nav-text');
+
+      const sidebarTitle =
+        document.getElementById('sidebar-title');
 
       let isMinimized = false;
 
       toggleBtn?.addEventListener('click', () => {
+
         isMinimized = !isMinimized;
-        const targetMargin = isMinimized ? '4rem' : '11rem';
 
-        if (sidebar) sidebar.style.width = targetMargin;
+        const targetMargin =
+          isMinimized ? '4rem' : '11rem';
 
-        // Safely check elements before modifying styles
+        if (sidebar) {
+          sidebar.style.width = targetMargin;
+        }
+
         if (clickBox) {
           clickBox.style.marginLeft = targetMargin;
-          clickBox.style.width = `calc(100% - ${targetMargin})`;
+          clickBox.style.width =
+            `calc(100% - ${targetMargin})`;
         }
 
         if (dashboardView) {
-          dashboardView.style.marginLeft = targetMargin;
-          dashboardView.style.width = `calc(100% - ${targetMargin})`;
+          dashboardView.style.marginLeft =
+            targetMargin;
+
+          dashboardView.style.width =
+            `calc(100% - ${targetMargin})`;
         }
 
-        if (toggleIcon) toggleIcon.style.transform = isMinimized ? 'rotate(180deg)' : 'rotate(0deg)';
-        
-        navTexts.forEach(el => el.style.display = isMinimized ? 'none' : '');
-        if (sidebarTitle) sidebarTitle.style.display = isMinimized ? 'none' : '';
+        if (toggleIcon) {
+          toggleIcon.style.transform =
+            isMinimized
+              ? 'rotate(180deg)'
+              : 'rotate(0deg)';
+        }
+
+        navTexts.forEach(el => {
+          el.style.display =
+            isMinimized ? 'none' : '';
+        });
+
+        if (sidebarTitle) {
+          sidebarTitle.style.display =
+            isMinimized ? 'none' : '';
+        }
+
       });
+
     });
+
   </script>
 
+
   <!-- JS Entry Script -->
-  <script type="module" src="../dist/base.js" defer></script>
+  <script
+    type="module"
+    src="../dist/base.js"
+    defer
+  ></script>
+
 </body>
 </html>
