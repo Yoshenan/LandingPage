@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -483,4 +483,304 @@
 
             <div
               class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+            >
+              <span>Manage Accounts</span>
+              <span class="group-hover:translate-x-1 transition-transform">
+                &rarr;
+              </span>
+            </div>
+
+          </div>
+
+        </a>
+
+
+        <!-- Contact Support -->
+        <div
+          data-action="Contacted Support"
+          class="log-box cursor-pointer group relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+        >
+
+          <div>
+
+            <div
+              class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
+            >
+              🎧
+            </div>
+
+            <h3
+              class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+            >
+              Contact Support
+            </h3>
+
+            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+              Get assistance or report issues to the support team.
+            </p>
+
+          </div>
+
+          <div
+            class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
+          >
+            <span>Get Help</span>
+
+            <span class="group-hover:translate-x-1 transition-transform">
+              &rarr;
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- SIDE NAVIGATION -->
+  <section id="side-nav" class="hidden">
+
+    <aside
+      id="sidebar-container"
+      class="fixed top-0 left-0 h-screen bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 p-4 z-40 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-2xl transition-all duration-300 overflow-hidden w-[11rem]"
+    >
+
+      <div class="space-y-4">
+
+        <!-- Toggle Bar -->
+        <div
+          class="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800/80 gap-2"
+        >
+
+          <span
+            id="sidebar-title"
+            class="text-xs font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 truncate"
+          >
+            Menu
+          </span>
+
+          <button
+            id="sidebar-toggle-btn"
+            title="Toggle Sidebar"
+            class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition text-xs flex items-center justify-center shrink-0"
+          >
+
+            <svg
+              id="toggle-icon"
+              class="w-4 h-4 transition-transform duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+              ></path>
+
+            </svg>
+
+          </button>
+
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="space-y-1.5">
+
+          <a
+            id="home-btn"
+            href="#click-box"
+            class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden"
+          >
+
+            <svg
+              class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+              ></path>
+
+            </svg>
+
+            <span class="nav-text truncate">Home</span>
+
+          </a>
+
+
+          <a
+            id="audit-btn"
+            href="#dashboard-view"
+            class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition text-sm font-medium whitespace-nowrap overflow-hidden"
+          >
+
+            <svg
+              class="w-4 h-4 shrink-0 text-emerald-600 dark:text-emerald-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              ></path>
+
+            </svg>
+
+            <span class="nav-text truncate">Audit Logs</span>
+
+          </a>
+
+        </nav>
+
+      </div>
+
+    </aside>
+
+  </section>
+
+
+  <!-- Toast -->
+  <div
+    id="toast-container"
+    class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"
+  ></div>
+
+
+  <!-- Theme + Sidebar Logic -->
+  <script>
+
+    // =========================
+    // THEME TOGGLE
+    // =========================
+
+    const mode = document.getElementById('theme-toggle');
+
+    function updateThemeButton() {
+      if (!mode) return;
+
+      const isDark =
+        document.documentElement.classList.contains('dark');
+
+      mode.textContent = isDark ? '🌙' : '☀️';
+    }
+
+    updateThemeButton();
+
+    mode?.addEventListener('click', () => {
+
+      const isDark =
+        document.documentElement.classList.toggle('dark');
+
+      localStorage.setItem(
+        'theme',
+        isDark ? 'dark' : 'light'
+      );
+
+      updateThemeButton();
+    });
+
+
+    // =========================
+    // SIDEBAR TOGGLE
+    // =========================
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const toggleBtn =
+        document.getElementById('sidebar-toggle-btn');
+
+      const sidebar =
+        document.getElementById('sidebar-container');
+
+      const clickBox =
+        document.getElementById('click-box');
+
+      const dashboardView =
+        document.getElementById('dashboard-view');
+
+      const toggleIcon =
+        document.getElementById('toggle-icon');
+
+      const navTexts =
+        document.querySelectorAll('.nav-text');
+
+      const sidebarTitle =
+        document.getElementById('sidebar-title');
+
+      let isMinimized = false;
+
+      toggleBtn?.addEventListener('click', () => {
+
+        isMinimized = !isMinimized;
+
+        const targetMargin =
+          isMinimized ? '4rem' : '11rem';
+
+        if (sidebar) {
+          sidebar.style.width = targetMargin;
+        }
+
+        if (clickBox) {
+          clickBox.style.marginLeft = targetMargin;
+          clickBox.style.width =
+            `calc(100% - ${targetMargin})`;
+        }
+
+        if (dashboardView) {
+          dashboardView.style.marginLeft =
+            targetMargin;
+
+          dashboardView.style.width =
+            `calc(100% - ${targetMargin})`;
+        }
+
+        if (toggleIcon) {
+          toggleIcon.style.transform =
+            isMinimized
+              ? 'rotate(180deg)'
+              : 'rotate(0deg)';
+        }
+
+        navTexts.forEach(el => {
+          el.style.display =
+            isMinimized ? 'none' : '';
+        });
+
+        if (sidebarTitle) {
+          sidebarTitle.style.display =
+            isMinimized ? 'none' : '';
+        }
+
+      });
+
+    });
+
+  </script>
+
+
+  <!-- JS Entry Script -->
+  <script
+    type="module"
+    src="../dist/base.js"
+    defer
+  ></script>
+
+</body>
+</html>
 ```
