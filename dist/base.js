@@ -24,6 +24,14 @@ if (toggle && passwordInputMain) {
   });
 }
 
+const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
+    document.documentElement.classList.add('dark');
+  }
+
 function escapeHtml(str) {
   if (typeof str !== 'string') return '';
   return str
