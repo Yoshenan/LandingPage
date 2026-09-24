@@ -137,7 +137,7 @@ const requestWizard = new Scenes.WizardScene<Scenes.WizardContext>(
       try {
 
         const response = await fetch(
-          '/api/submission',
+          'https://landingpage-rq72.onrender.com/api/submission',
           {
             method: 'POST',
             headers: {
