@@ -665,7 +665,7 @@ export function show_toast (message, isError = false) {
 
 
 async function getTelegramData() {
-  const response = await fetch('http://localhost:3000/api/submission');
+  const response = await fetch('/api/submission');
   const data = await response.json();
 
   data.forEach((submission) => {
