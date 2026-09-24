@@ -313,20 +313,44 @@ app.post('/api/logout', requireAuth, (req, res, next) => {
   });
 });
 
-app.post('/api/submission' , async(req,res) => {
-
+app.post('/api/submission', async (req, res) => {
   console.log("TELEGRAM POST RECEIVED:", req.body);
-  try{
-    const submission = await Telegram.create(req.body)
-    res.status(201).json(submission);
-  }
-  catch(error){
-    console.error("Telegram submission ",error);
-    res.status(500).json({
-      error : "Failed to save submission"
+
+  try {
+    const { 
+      client, organization, 
+      fullName, email, 
+      phone, num, 
+      environment, environmentDetails, 
+      platformCategory, platForm, 
+      requestType, Req, 
+      source 
+    } = req.body;
+
+    // Explicitly construct the object to prevent Mongoose from stripping mismatched keys
+    const newSubmission = await Telegram.create({
+      client: client || organization || 'N/A',
+      organization: organization || client || 'N/A',
+      fullName: fullName || 'Anonymous',
+      email: email || 'N/A',
+      phone: phone || num || 'N/A',
+      environment: environment || environmentDetails || 'N/A',
+      platformCategory: platformCategory || platForm || 'Telegram',
+      requestType: requestType || Req || 'General Request',
+      source: source || 'Telegram Bot',
+      submittedAt: new Date().toISOString()
+    });
+
+    console.log("Successfully saved submission to DB:", newSubmission);
+    return res.status(201).json(newSubmission);
+
+  } catch (error) {
+    console.error("Telegram submission error:", error);
+    return res.status(500).json({
+      error: "Failed to save submission",
+      details: error instanceof Error ? error.message : String(error)
     });
   }
-
 });
 
 
