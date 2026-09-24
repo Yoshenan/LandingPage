@@ -137,7 +137,7 @@ const requestWizard = new Scenes.WizardScene<Scenes.WizardContext>(
       try {
 
         const response = await fetch(
-          'http://localhost:3000/api/submission',
+          '/api/submission',
           {
             method: 'POST',
             headers: {
