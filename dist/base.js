@@ -785,7 +785,7 @@ async function getTelegramData() {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/submission/${submission._id}`,
+          `/api/submission/${submission._id}`,
           {
             method: 'DELETE'
           }
