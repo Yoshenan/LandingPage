@@ -157,23 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch('/api/session-info')
   .then(response => response.json())
   .then(data => {
-    // 1. Match the capital 'W' returned by Express
     const warnTime = data.WarnTime;
 
     if (warnTime > 0) {
-      // More than 2 minutes left: Schedule warning for when 2 minutes remain
       setTimeout(() => {
         show_toast('You have 2 minutes remaining for session');
       }, warnTime);
     } else if (data.maxAge > 0) {
-      // Less than 2 minutes left: Alert immediately with accurate status
       show_toast('Warning: Your session expires in less than 2 minutes!');
     }
   })
   .catch(err => console.error('Failed to sync session timer:', err));
 
   // ==========================================
-  // ROW TEMPLATE BUILDER
+  // ROW TEMPLATE BUILDER (UPDATED BUTTON VISIBILITY)
   // ==========================================
   function buildRowContent(user) {
     const roleBadgeClass = user.role === 'Admin'
@@ -200,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <td class="py-3 px-4 text-right space-x-2">
         <button 
           type="button"
-          class="edit-btn text-xs bg-blue-900/40 text-blue-300 hover:bg-blue-800/60 border border-blue-800/60 px-3 py-1 rounded transition cursor-pointer select-none"
+          class="edit-btn text-xs font-bold bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-md transition shadow-sm cursor-pointer select-none border border-blue-400/30"
           data-id="${safeAttribute(id)}"
           data-username="${safeAttribute(rawUsername)}"
           data-company="${safeAttribute(rawCompany)}"
@@ -210,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </button>
         <button 
           type="button"
-          class="delete-btn text-xs bg-rose-900/40 text-rose-300 hover:bg-rose-800/60 border border-rose-800/60 px-3 py-1 rounded transition cursor-pointer select-none"
+          class="delete-btn text-xs font-bold bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-md transition shadow-sm cursor-pointer select-none border border-rose-400/30"
           data-id="${safeAttribute(id)}"
           data-role="${safeAttribute(rawRole)}"
         >
