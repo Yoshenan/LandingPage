@@ -157,24 +157,24 @@ function renderRequests() {
 
   existingRequests.forEach((item) => {
     const container = document.createElement('div');
-    container.className = 'space-y-1 request-item';
+    container.className = 'space-y-1 request-item mb-3';
     container.dataset.org = (item.organization || '').toLowerCase();
 
-    // Request button (Theme Aware)
+    // Request card / button container (Theme Aware)
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className =
-      'w-full text-left bg-slate-100 hover:bg-slate-200 text-emerald-600 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-emerald-800/60 dark:hover:border-emerald-500/80 p-3 rounded-lg dark:text-emerald-400 font-mono text-sm font-semibold transition';
+      'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
 
     btn.textContent = item.id || 'REQ-UNKNOWN';
 
     // Details container (Theme Aware)
     const details = document.createElement('div');
     details.className =
-      'hidden bg-slate-100/80 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 p-3 rounded-lg text-xs space-y-2';
+      'hidden bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
 
     details.innerHTML = `
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
         <p class="text-blue-600 dark:text-blue-400 font-semibold">
           ${escapeHtml(item.organization || 'General')}
         </p>
@@ -198,7 +198,7 @@ function renderRequests() {
         </div>
       </div>
 
-      <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+      <p class="text-slate-700 dark:text-slate-300 leading-relaxed pt-1">
         ${escapeHtml(item.request || 'No details')}
       </p>
     `;
@@ -640,150 +640,116 @@ export function show_toast (message, isError = false) {
 }
 
 async function getTelegramData() {
-  const response = await fetch('/api/submission');
-  const data = await response.json();
+  try {
+    const response = await fetch('/api/submission');
+    if (!response.ok) throw new Error('Failed to fetch Telegram submissions');
+    const data = await response.json();
 
-  data.forEach((submission) => {
-    const item = document.createElement('div');
+    if (!list) return;
+    list.innerHTML = '';
 
-    item.className =
-      "bg-gray-800 border border-gray-700/60 rounded-lg mb-3 shadow-sm text-sm overflow-hidden";
+    if (data.length === 0) {
+      list.innerHTML = '<p class="text-slate-500 dark:text-slate-400 text-sm">No Telegram requests found.</p>';
+      return;
+    }
 
-    item.innerHTML = `
-      <!-- Header -->
-      <div class="flex items-center justify-between p-3.5">
+    data.forEach((submission) => {
+      const item = document.createElement('div');
 
-        <div class="flex items-center gap-2">
-          <span class="bg-blue-500/10 text-blue-400 font-semibold px-2 py-0.5 rounded">
-            TELEGRAM
-          </span>
+      item.className =
+        'bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 rounded-lg mb-3 shadow-sm text-sm overflow-hidden';
 
-          <span class="text-gray-400 text-xs">
-            ${new Date(submission.submittedAt).toLocaleString()}
-          </span>
+      item.innerHTML = `
+        <!-- Header -->
+        <div class="flex items-center justify-between p-3.5 bg-slate-200/50 dark:bg-slate-900 border-b border-slate-300 dark:border-slate-800">
+
+          <div class="flex items-center gap-2">
+            <span class="bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold px-2 py-0.5 rounded text-xs">
+              TELEGRAM
+            </span>
+
+            <span class="text-slate-500 dark:text-slate-400 text-xs">
+              ${submission.submittedAt ? new Date(submission.submittedAt).toLocaleString() : 'N/A'}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              class="toggle-btn text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-300 dark:hover:bg-slate-800 transition"
+              title="Minimize"
+            >
+              −
+            </button>
+
+            <button
+              type="button"
+              class="delete-btn text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 px-2 py-1 rounded hover:bg-red-500/10 transition"
+              title="Delete"
+            >
+              🗑
+            </button>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2">
-
-          <button
-            class="toggle-btn text-gray-400 hover:text-white px-2 py-1 rounded hover:bg-gray-700"
-            title="Minimize"
-          >
-            −
-          </button>
-
-          <button
-            class="delete-btn text-red-400 hover:text-red-300 px-2 py-1 rounded hover:bg-gray-700"
-            title="Delete"
-          >
-            🗑
-          </button>
-
+        <!-- Content -->
+        <div class="submission-content px-3.5 py-3 text-slate-700 dark:text-slate-300 text-xs space-y-1.5">
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Client:</span> ${escapeHtml(submission.client || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Organization:</span> ${escapeHtml(submission.organization || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Full Name:</span> ${escapeHtml(submission.fullName || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Email:</span> ${escapeHtml(submission.email || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Phone:</span> ${escapeHtml(submission.phone || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Environment:</span> ${escapeHtml(submission.environment || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Platform:</span> ${escapeHtml(submission.platformCategory || 'N/A')}</p>
+          <p><span class="text-slate-500 dark:text-slate-400 font-medium">Request:</span> ${escapeHtml(submission.requestType || 'N/A')}</p>
         </div>
-      </div>
+      `;
 
-      <!-- Content -->
-      <div class="submission-content px-3.5 pb-3.5">
-        <div class="border-t border-gray-700 pt-3 text-gray-300 space-y-1">
+      // Minimize / maximize
+      const toggleBtn = item.querySelector('.toggle-btn');
+      const content = item.querySelector('.submission-content');
 
-          <p>
-            <span class="text-gray-400 font-medium">Client:</span>
-            ${submission.client}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Organization:</span>
-            ${submission.organization}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Full Name:</span>
-            ${submission.fullName}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Email:</span>
-            ${submission.email}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Phone:</span>
-            ${submission.phone}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Environment:</span>
-            ${submission.environment}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Platform:</span>
-            ${submission.platformCategory}
-          </p>
-
-          <p>
-            <span class="text-gray-400 font-medium">Request:</span>
-            ${submission.requestType}
-          </p>
-
-        </div>
-      </div>
-    `;
-
-    // Minimize / maximize
-    const toggleBtn = item.querySelector('.toggle-btn');
-    const content = item.querySelector('.submission-content');
-
-    toggleBtn?.addEventListener('click', () => {
-      if (content?.classList.contains('hidden')) {
-        content?.classList.remove('hidden');
-
-        if (toggleBtn) {
-          toggleBtn.textContent = '−';
-          toggleBtn.setAttribute('title', 'Minimize');
-        }
-
-      } else {
-        content?.classList.add('hidden');
-
-        if (toggleBtn) {
-          toggleBtn.textContent = '+';
-          toggleBtn.setAttribute('title', 'Maximize');
-        }
-      }
-    });
-
-    // Delete
-    const deleteBtn = item.querySelector('.delete-btn');
-
-    deleteBtn?.addEventListener('click', async () => {
-
-      try {
-        const response = await fetch(
-          `/api/submission/${submission._id}`,
-          {
-            method: 'DELETE'
+      toggleBtn?.addEventListener('click', () => {
+        if (content?.classList.contains('hidden')) {
+          content?.classList.remove('hidden');
+          if (toggleBtn) {
+            toggleBtn.textContent = '−';
+            toggleBtn.setAttribute('title', 'Minimize');
           }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to delete submission');
+        } else {
+          content?.classList.add('hidden');
+          if (toggleBtn) {
+            toggleBtn.textContent = '+';
+            toggleBtn.setAttribute('title', 'Maximize');
+          }
         }
+      });
 
-        item.remove();
+      // Delete
+      const deleteBtn = item.querySelector('.delete-btn');
+      deleteBtn?.addEventListener('click', async () => {
+        try {
+          const response = await fetch(`/api/submission/${submission._id}`, {
+            method: 'DELETE'
+          });
 
-        show_toast('Submission deleted successfully', 'success');
+          if (!response.ok) {
+            throw new Error('Failed to delete submission');
+          }
 
-      } catch (error) {
-        console.error('Delete error:', error);
-        show_toast('Failed to delete submission.','error');
-      }
+          item.remove();
+          show_toast('Submission deleted successfully');
+        } catch (error) {
+          console.error('Delete error:', error);
+          show_toast('Failed to delete submission.', true);
+        }
+      });
+
+      list?.append(item);
     });
-
-    list?.append(item);
-  });
+  } catch (err) {
+    console.error('Error loading Telegram data:', err);
+  }
 }
-
-
 
 getTelegramData();
