@@ -237,9 +237,10 @@ function renderRequests() {
     const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-     const id = `REQ-${Date.now()}Tele`;
-     const cleanText = `Submitted ${id} request for ${submission.platformCategory} (${submission.environment}) by ${submission.fullName} works in ${submission.client} company`;
-     const response = await fetch(`/api/submission/accept/${submission._id}`, {
+     const id = `REQ-${Date.now()}Web`;
+     const reqData = item.formData;
+     const cleanText = `Submitted ${id} request for ${reqData.platForm} (${reqData.environmentDetails}) by ${reqData.fullName} works in ${item.organization} company`;
+     const response = await fetch(`/api/submit/accept/${item.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
