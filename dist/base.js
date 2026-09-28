@@ -233,14 +233,14 @@ function renderRequests() {
         populateFormForEdit(item.id);
       });
     }
-
-    const acceptBtn = details.querySelector('.accept-req-btn');
+const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-    // CRITICAL: Send item._id (6aba4592b74318859b50830f) to the backend
-    const mongoId = item._id || item.id;
+    // DO NOT use `REQ-${Date.now()}Web` in the URL.
+    // Use the real MongoDB ID that came from the database record when rendering:
+    const targetId = item._id || item.id; 
 
-    const response = await fetch(`/api/submit/accept/${mongoId}`, {
+    const response = await fetch(`/api/submit/accept/${targetId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -261,35 +261,26 @@ acceptBtn?.addEventListener('click', async () => {
 
     const result = await response.json();
 
-    // Remove the pending item from DOM
+    // Remove pending card from UI
     item.remove();
 
-    // Append to accepted list UI
+    // Append to accepted list UI (you can still use REQ-... as a UI display text here)
     const acceptList = document.getElementById('accepted-list');
     if (acceptList) {
-      const displayId = `REQ-${Date.now()}Web`; // Custom string for display only
+      const displayTag = `REQ-${Date.now()}Web`; 
       const container = document.createElement('div');
       container.className = 'space-y-1 request-item mb-3';
-      container.dataset.org = (item.organization || item.company || '').toLowerCase();
 
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
-      btn.textContent = displayId;
+      btn.className = 'w-full text-left bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-emerald-600 font-mono text-sm font-semibold';
+      btn.textContent = displayTag;
 
       const detailsDiv = document.createElement('div');
-      detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+      detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-xs space-y-2 mt-1';
       detailsDiv.innerHTML = `
-        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-          <p class="text-blue-600 dark:text-blue-400 font-semibold">
-            ${escapeHtml(item.organization || item.company || 'General')}
-          </p>
-          <span class="text-slate-500 dark:text-slate-400 text-[10px]">
-            ${new Date().toLocaleString()}
-          </span>
-        </div>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-          ${escapeHtml(result.log.entry)}
+        <p class="text-slate-700 dark:text-slate-300">
+          ${escapeHtml(result.log.entry || '')}
         </p>
       `;
 
@@ -305,6 +296,7 @@ acceptBtn?.addEventListener('click', async () => {
     show_toast('Failed to accept request.', true);
   }
 });
+   
 
     // Delete handler
     const deleteBtn = details.querySelector('.delete-req-btn');
