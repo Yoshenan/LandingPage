@@ -747,7 +747,7 @@ acceptBtn?.addEventListener('click', async () => {
      const cleanText = `Submitted ${id} request for ${submission.platForm} (${submission.environmentDetails}) by ${submission.fullName} works in ${submission.company} company`;
      const response = await fetch(`/api/submission/accept/${submission._id}`, {
       method: 'POST',
-      body: JSON.stringfy({cleanText})
+      body: JSON.stringify({cleanText})
     });
 
     if (!response.ok) throw new Error('Failed to accept submission');
