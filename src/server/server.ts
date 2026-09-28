@@ -387,9 +387,9 @@ app.delete('/api/submission/:id',async (req, res) => {
   }
 });
 
-app.post('api/submission/accept:id',async(req,res)=>{
+app.post('/api/submission/accept/:id',async(req,res)=>{
   try{
-     const id = req.params;
+     const {id} = req.params;
 
      const pendingItem = await Telegram.findById(id);
      if(!pendingItem){
