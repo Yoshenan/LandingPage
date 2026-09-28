@@ -172,7 +172,7 @@ function renderRequests() {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className =
-      'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+      'text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
 
     btn.textContent = item.id || 'REQ-UNKNOWN';
 
@@ -286,6 +286,26 @@ function renderRequests() {
         const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
         const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
         sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
+
+       const acceptedRequests = JSON.parse(
+  sessionStorage.getItem('accepted_requests') || '[]'
+);
+
+acceptedRequests.unshift({
+  id: item.id || targetId,
+  organization: data.organization || data.selectedOrg || data.company || 'General',
+  text: result.log?.entry || 'Request accepted and logged successfully.',
+  date: new Date().toLocaleString()
+});
+
+sessionStorage.setItem(
+  'accepted_requests',
+  JSON.stringify(acceptedRequests)
+);
+
+const acceptList = document.getElementById('accepted-list');
+
+const acceptList = document.getElementById('accepted-list');
 
         // 3. Append to Accepted UI
         const acceptList = document.getElementById('accepted-list');
@@ -866,7 +886,7 @@ async function getTelegramData() {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className =
-              'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+              'text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
             btn.textContent = id;
 
             const details = document.createElement('div');
