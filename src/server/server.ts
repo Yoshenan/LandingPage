@@ -434,39 +434,29 @@ app.post('/api/submit/accept/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    // 1. Find the document in MongoDB using its ObjectId
+    // Must be queried using the actual MongoDB ObjectId passed from frontend
     const pendingWebItem = await Log.findById(id);
 
     if (!pendingWebItem) {
       return res.status(404).json({ error: "Pending item not found" });
     }
 
-    // 2. Destructure fields from body, or fallback to the pending item's existing data
-    const fullName = req.body.fullName || pendingWebItem.fullName;
-    const email = req.body.email || pendingWebItem.email;
-    const company = req.body.company || pendingWebItem.company;
-    const environmentDetails = req.body.environmentDetails || pendingWebItem.environmentDetails;
-    const platForm = req.body.platForm || pendingWebItem.platForm;
-    const Req = req.body.Req || pendingWebItem.Req;
-    const num = req.body.num || pendingWebItem.num;
-    const organization = req.body.organization || pendingWebItem.organization;
-
-    // 3. Create the accepted log entry
+    // Create the accepted log entry copying fields from the existing document
     const newSubmission = await Log.create({
-      fullName,
-      email,
-      company,
-      environmentDetails,
-      platForm,
-      Req,
-      num,
-      organization,
-      entry: `Submitted ${Req} request for ${platForm} (${environmentDetails})`,
-      username: fullName || email || 'Anonymous',
-      companyName: company || 'General'
+      fullName: pendingWebItem.fullName,
+      email: pendingWebItem.email,
+      company: pendingWebItem.company,
+      environmentDetails: pendingWebItem.environmentDetails,
+      platForm: pendingWebItem.platForm,
+      Req: pendingWebItem.Req,
+      num: pendingWebItem.num,
+      organization: pendingWebItem.organization,
+      entry: pendingWebItem.entry,
+      username: pendingWebItem.username,
+      companyName: pendingWebItem.companyName
     });
 
-    // 4. Delete the original pending item using its _id
+    // Delete original pending item
     await Log.findByIdAndDelete(id);
 
     return res.status(200).json({
