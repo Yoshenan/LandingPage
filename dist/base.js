@@ -682,6 +682,13 @@ async function getTelegramData() {
 
           <div class="flex items-center gap-2">
             <button
+              class="accept-btn text-emerald-400 hover:text-emerald-300 px-2 py-1 rounded hover:bg-gray-700 font-bold"
+              title="Accept Request"
+            >
+              ✓
+            </button>
+            
+            <button
               type="button"
               class="toggle-btn text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-300 dark:hover:bg-slate-700 transition"
               title="Minimize"
