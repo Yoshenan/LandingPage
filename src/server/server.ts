@@ -430,39 +430,53 @@ app.post('/api/submission/accept/:id',async(req,res)=>{
   }
 });
 
-app.post('/api/submit/accept/:id',async(req,res)=>{
-  try{
-     const {id} = req.params;
+app.post('/api/submit/accept/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
 
-     const pendingWebItem = await Log.findById(id);
-     if(!pendingWebItem){
-      return res.status(404).json({
-        error:"Pending item not found"
-      });
-     }
+    // 1. Find the document in MongoDB using its ObjectId
+    const pendingWebItem = await Log.findById(id);
 
-    const { fullName, email, company, environmentDetails, platForm, Req, num, organization } = req.body;
+    if (!pendingWebItem) {
+      return res.status(404).json({ error: "Pending item not found" });
+    }
 
+    // 2. Destructure fields from body, or fallback to the pending item's existing data
+    const fullName = req.body.fullName || pendingWebItem.fullName;
+    const email = req.body.email || pendingWebItem.email;
+    const company = req.body.company || pendingWebItem.company;
+    const environmentDetails = req.body.environmentDetails || pendingWebItem.environmentDetails;
+    const platForm = req.body.platForm || pendingWebItem.platForm;
+    const Req = req.body.Req || pendingWebItem.Req;
+    const num = req.body.num || pendingWebItem.num;
+    const organization = req.body.organization || pendingWebItem.organization;
+
+    // 3. Create the accepted log entry
     const newSubmission = await Log.create({
-      fullName, email, company, environmentDetails, platForm, Req, num, organization,
+      fullName,
+      email,
+      company,
+      environmentDetails,
+      platForm,
+      Req,
+      num,
+      organization,
       entry: `Submitted ${Req} request for ${platForm} (${environmentDetails})`,
       username: fullName || email || 'Anonymous',
       companyName: company || 'General'
     });
 
-     await Log.findByIdAndDelete(id);
+    // 4. Delete the original pending item using its _id
+    await Log.findByIdAndDelete(id);
 
-     res.status(200).json({
-      message:"request accepted",
-      log:newSubmission
-     });
+    return res.status(200).json({
+      message: "Request accepted successfully",
+      log: newSubmission
+    });
 
-  }
-  catch(error){
-    console.error('Accept Error',error);
-    res.status(500).json({
-      error:"Failed to Accept Request"
-    })
+  } catch (error) {
+    console.error('Accept Error:', error);
+    return res.status(500).json({ error: "Failed to accept request" });
   }
 });
 
