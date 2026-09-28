@@ -387,6 +387,49 @@ app.delete('/api/submission/:id',async (req, res) => {
   }
 });
 
+app.post('api/submission/accept:id',async(req,res)=>{
+  try{
+     const id = req.params;
+
+     const pendingItem = await Telegram.findById(id);
+     if(!pendingItem){
+      return res.status(404).json({
+        error:"Pending item not found"
+      });
+     }
+
+     const reqId = "REQ-"+Date.now()
+
+     const createdLog = await Log.create({
+      fullName: pendingItem.fullName,
+      email: pendingItem.email,
+      company: pendingItem.client,
+      environmentDetails: pendingItem.environment,
+      platForm: pendingItem.platformCategory,
+      Req: pendingItem.requestType,
+      num: pendingItem.phone,
+      organization: pendingItem.organization,
+      entry: `[${reqId}]Submitted ${pendingItem.requestType} request for ${pendingItem.platformCategory} (${pendingItem.environment}) by ${pendingItem.fullName}`,
+      username: pendingItem.fullName,
+      companyName: pendingItem.client
+     });
+     await Telegram.findByIdAndDelete(id);
+
+     res.status(200).json({
+      message:"request accepted",
+      reqId : reqId,
+      log:createdLog
+     });
+
+  }
+  catch(error){
+    console.error('Accept Error',error);
+    res.status(500).json({
+      error:"Failed to Accept Request"
+    })
+  }
+});
+
 // 9. Start Listener
 app.listen(3000, '0.0.0.0', () => {
     console.log("Server running on http://10.3.6.112:3000");
