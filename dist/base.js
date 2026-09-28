@@ -328,9 +328,6 @@ function renderRequests() {
         sessionStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
 
 const acceptList = document.getElementById('accepted-list');
-
-        // 3. Append to Accepted UI
-        const acceptList = document.getElementById('accepted-list');
         if (acceptList) {
           const displayTag = item.id || `REQ-${Date.now()}Web`;
           const acceptedCard = document.createElement('div');
