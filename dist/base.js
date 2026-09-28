@@ -754,8 +754,54 @@ acceptBtn?.addEventListener('click', async () => {
     });
 
     if (!response.ok) throw new Error('Failed to accept submission');
-
     item.remove();
+
+    const acceptList = document.getElementbyId('accepted-list');
+
+    if(acceptList){
+      const container = document.createElement('div');
+      container.className = 'space-y-1 request-item mb-3';
+      container.dataset.org = (submission.organization || submission.company || '').toLowerCase();
+
+      // Request button (With dark mode background)
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className =
+        'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+      btn.textContent = id;
+
+      // Details container (With dark mode background)
+      const details = document.createElement('div');
+      details.className =
+        'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+
+      details.innerHTML = `
+        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+          <p class="text-blue-600 dark:text-blue-400 font-semibold">
+            ${escapeHtml(submission.organization || submission.company || 'General')}
+          </p>
+          <span class="text-slate-500 dark:text-slate-400 text-[10px]">
+            ${new Date().toLocaleString()}
+          </span>
+        </div>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
+          ${escapeHtml(cleanText)}
+        </p>
+      `;
+
+      // Toggle details on button click
+      btn.addEventListener('click', () => {
+        details.classList.toggle('hidden');
+      });
+
+      container.appendChild(btn);
+      container.appendChild(details);
+
+      // Prepend to top of accepted list
+      requestsList.prepend(container);
+
+      
+    }
     show_toast('Request accepted and logged successfully!');
   } catch (error) {
     console.error('Accept error:', error);
