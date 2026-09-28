@@ -441,27 +441,20 @@ app.post('/api/submit/accept/:id',async(req,res)=>{
       });
      }
 
-     const reqId = "REQ-"+Date.now()
+    const { fullName, email, company, environmentDetails, platForm, Req, num, organization } = req.body;
 
-     const createdLog = await Log.create({
-      fullName: pendingWebItem.fullName,
-      email: pendingWebItem.email,
-      company: pendingWebItem.client,
-      environmentDetails: pendingWebItem.environment,
-      platForm: pendingWebItem.platformCategory,
-      Req: pendingWebItem.requestType,
-      num: pendingWebItem.phone,
-      organization: pendingWebItem.organization,
-      entry: `[${reqId}]Submitted ${pendingWebItem.requestType} request for ${pendingWebItem.platformCategory} (${pendingWebItem.environment}) by ${pendingWebItem.fullName}`,
-      username: pendingWebItem.fullName,
-      companyName: pendingWEbItem.client
-     });
+    const newSubmission = await Log.create({
+      fullName, email, company, environmentDetails, platForm, Req, num, organization,
+      entry: `Submitted ${Req} request for ${platForm} (${environmentDetails})`,
+      username: fullName || email || 'Anonymous',
+      companyName: company || 'General'
+    });
+
      await Log.findByIdAndDelete(id);
 
      res.status(200).json({
       message:"request accepted",
-      reqId : reqId,
-      log:createdLog
+      log:newSubmission
      });
 
   }
