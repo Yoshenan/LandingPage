@@ -732,6 +732,27 @@ async function getTelegramData() {
         }
       });
 
+      // Accept Handler
+const acceptBtn = item.querySelector('.accept-btn');
+acceptBtn?.addEventListener('click', async () => {
+  try {
+    const subId = submission._id || submission.id;
+
+    const response = await fetch(`/api/submission/accept/${subId}`, {
+      method: 'POST'
+    });
+
+    if (!response.ok) throw new Error('Failed to accept submission');
+
+    item.remove();
+    renderRequests(); // Refresh your logs view
+    show_toast('Request accepted and logged successfully!');
+  } catch (error) {
+    console.error('Accept error:', error);
+    show_toast('Failed to accept request.', true);
+  }
+});
+
       // Delete handler
       const deleteBtn = item.querySelector('.delete-btn');
       deleteBtn?.addEventListener('click', async () => {
