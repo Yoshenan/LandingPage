@@ -242,7 +242,7 @@ acceptBtn?.addEventListener('click', async () => {
     const cleanText = `Submitted ${id} request for ${reqData.platForm} (${reqData.environmentDetails}) by ${reqData.fullName} works in ${item.organization || item.company} company`;
 
     // Send payload matching your backend req.body expectations
-    const response = await fetch(`/api/submit/accept/${item.id}`, {
+    const response = await fetch(`/api/submit/accept/${item._id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
