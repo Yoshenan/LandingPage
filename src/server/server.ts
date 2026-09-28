@@ -430,6 +430,49 @@ app.post('/api/submission/accept/:id',async(req,res)=>{
   }
 });
 
+app.post('/api/submit/accept/:id',async(req,res)=>{
+  try{
+     const {id} = req.params;
+
+     const pendingWebItem = await Log.findById(id);
+     if(!pendingWebItem){
+      return res.status(404).json({
+        error:"Pending item not found"
+      });
+     }
+
+     const reqId = "REQ-"+Date.now()
+
+     const createdLog = await Log.create({
+      fullName: pendingWebItem.fullName,
+      email: pendingWebItem.email,
+      company: pendingWebItem.client,
+      environmentDetails: pendingWebItem.environment,
+      platForm: pendingWebItem.platformCategory,
+      Req: pendingWebItem.requestType,
+      num: pendingWebItem.phone,
+      organization: pendingWebItem.organization,
+      entry: `[${reqId}]Submitted ${pendingWebItem.requestType} request for ${pendingWebItem.platformCategory} (${pendingWebItem.environment}) by ${pendingWebItem.fullName}`,
+      username: pendingWebItem.fullName,
+      companyName: pendingWEbItem.client
+     });
+     await Log.findByIdAndDelete(id);
+
+     res.status(200).json({
+      message:"request accepted",
+      reqId : reqId,
+      log:createdLog
+     });
+
+  }
+  catch(error){
+    console.error('Accept Error',error);
+    res.status(500).json({
+      error:"Failed to Accept Request"
+    })
+  }
+});
+
 // 9. Start Listener
 app.listen(3000, '0.0.0.0', () => {
     console.log("Server running on http://10.3.6.112:3000");
