@@ -743,10 +743,13 @@ async function getTelegramData() {
 const acceptBtn = item.querySelector('.accept-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-     const id = `'REQ-'+Date.now()+"Tele"`;
-     const cleanText = `Submitted ${id} request for ${submission.platForm} (${submission.environmentDetails}) by ${submission.fullName} works in ${submission.company} company`;
+     const id = `REQ-${Date.now()}Tele`;
+     const cleanText = `Submitted ${id} request for ${submission.platformCategory} (${submission.environment}) by ${submission.fullName} works in ${submission.client} company`;
      const response = await fetch(`/api/submission/accept/${submission._id}`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({cleanText})
     });
 
