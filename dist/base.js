@@ -743,16 +743,16 @@ async function getTelegramData() {
 const acceptBtn = item.querySelector('.accept-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-    const subId = submission._id || submission.id;
-
-    const response = await fetch(`/api/submission/accept/${subId}`, {
-      method: 'POST'
+     const id = `'REQ-'+Date.now()+"Tele"`;
+     const cleanText = `Submitted ${id} request for ${submission.platForm} (${submission.environmentDetails}) by ${submission.fullName} works in ${submission.company} company`;
+     const response = await fetch(`/api/submission/accept/${submission._id}`, {
+      method: 'POST',
+      body: JSON.stringfy({cleanText})
     });
 
     if (!response.ok) throw new Error('Failed to accept submission');
 
     item.remove();
-    renderRequests(); // Refresh your logs view
     show_toast('Request accepted and logged successfully!');
   } catch (error) {
     console.error('Accept error:', error);
