@@ -44,6 +44,35 @@ function escapeHtml(str) {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderRequests();
+
+  const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+  const acceptList = document.getElementById('accepted-list');
+
+  acceptedRequests.forEach((request) => {
+    if (!acceptList) return;
+
+    const acceptedCard = document.createElement('div');
+    acceptedCard.className = 'max-w-xl space-y-1 request-item mb-3';
+
+    const acceptedBtn = document.createElement('button');
+    acceptedBtn.type = 'button';
+    acceptedBtn.className = 'text-left bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-emerald-600 font-mono text-sm font-semibold';
+    acceptedBtn.textContent = request.id;
+
+    const detailsDiv = document.createElement('div');
+    detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+    detailsDiv.innerHTML = `
+      <p class="text-slate-700 dark:text-slate-300">
+        ${escapeHtml(request.text)}
+      </p>
+    `;
+
+    acceptedBtn.addEventListener('click', () => detailsDiv.classList.toggle('hidden'));
+    acceptedCard.appendChild(acceptedBtn);
+    acceptedCard.appendChild(detailsDiv);
+    acceptList.appendChild(acceptedCard);
+  });
+
   checkAdminAccess();
   updateCompanyUI(sessionStorage.getItem('company_name') || '');
   switchState(sessionStorage.getItem('logged_username') ? 'Dashboard' : 'Login');
@@ -286,6 +315,17 @@ function renderRequests() {
         const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
         const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
         sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
+
+                const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+
+        acceptedRequests.unshift({
+          id: item.id,
+          organization: data.organization || data.selectedOrg || data.company || 'General',
+          text: result.log?.entry || 'Request accepted and logged successfully.',
+          date: new Date().toLocaleString()
+        });
+
+        sessionStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
 
 const acceptList = document.getElementById('accepted-list');
 
@@ -855,8 +895,19 @@ async function getTelegramData() {
             body: JSON.stringify({ cleanText })
           });
 
-          if (!response.ok) throw new Error('Failed to accept submission');
+                    if (!response.ok) throw new Error('Failed to accept submission');
           item.remove();
+
+          const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+
+          acceptedRequests.unshift({
+            id: id,
+            organization: submission.organization || submission.company || 'General',
+            text: cleanText,
+            date: new Date().toLocaleString()
+          });
+
+          sessionStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
 
           const acceptList = document.getElementById('accepted-list');
 
