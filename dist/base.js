@@ -203,6 +203,15 @@ function renderRequests() {
           >
             Delete
           </button>
+
+          <button
+            type="button"
+            class="accept-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-red-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
+            data-id="${escapeHtml(item.id || '')}"
+          >
+            Accept
+          </button>
+          
         </div>
       </div>
 
@@ -224,6 +233,75 @@ function renderRequests() {
         populateFormForEdit(item.id);
       });
     }
+
+    const acceptBtn = item.querySelector('.accept-btn');
+acceptBtn?.addEventListener('click', async () => {
+  try {
+     const id = `REQ-${Date.now()}Tele`;
+     const cleanText = `Submitted ${id} request for ${submission.platformCategory} (${submission.environment}) by ${submission.fullName} works in ${submission.client} company`;
+     const response = await fetch(`/api/submission/accept/${submission._id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({cleanText})
+    });
+
+    if (!response.ok) throw new Error('Failed to accept submission');
+    item.remove();
+
+    const acceptList = document.getElementById('accepted-list');
+
+    if(acceptList){
+      const container = document.createElement('div');
+      container.className = 'space-y-1 request-item mb-3';
+      container.dataset.org = (submission.organization || submission.company || '').toLowerCase();
+
+      // Request button (With dark mode background)
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className =
+        'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+      btn.textContent = id;
+
+      // Details container (With dark mode background)
+      const details = document.createElement('div');
+      details.className =
+        'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+
+      details.innerHTML = `
+        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+          <p class="text-blue-600 dark:text-blue-400 font-semibold">
+            ${escapeHtml(submission.organization || submission.company || 'General')}
+          </p>
+          <span class="text-slate-500 dark:text-slate-400 text-[10px]">
+            ${new Date().toLocaleString()}
+          </span>
+        </div>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
+          ${escapeHtml(cleanText)}
+        </p>
+      `;
+
+      // Toggle details on button click
+      btn.addEventListener('click', () => {
+        details.classList.toggle('hidden');
+      });
+
+      container.appendChild(btn);
+      container.appendChild(details);
+
+      // Prepend to top of accepted list
+      acceptList.prepend(container);
+
+      
+    }
+    show_toast('Request accepted and logged successfully!');
+  } catch (error) {
+    console.error('Accept error:', error);
+    show_toast('Failed to accept request.', true);
+  }
+});
 
     // Delete handler
     const deleteBtn = details.querySelector('.delete-req-btn');
