@@ -287,24 +287,6 @@ function renderRequests() {
         const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
         sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
 
-       const acceptedRequests = JSON.parse(
-  sessionStorage.getItem('accepted_requests') || '[]'
-);
-
-acceptedRequests.unshift({
-  id: item.id || targetId,
-  organization: data.organization || data.selectedOrg || data.company || 'General',
-  text: result.log?.entry || 'Request accepted and logged successfully.',
-  date: new Date().toLocaleString()
-});
-
-sessionStorage.setItem(
-  'accepted_requests',
-  JSON.stringify(acceptedRequests)
-);
-
-const acceptList = document.getElementById('accepted-list');
-
 const acceptList = document.getElementById('accepted-list');
 
         // 3. Append to Accepted UI
