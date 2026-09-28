@@ -237,26 +237,46 @@ function renderRequests() {
     const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-     const id = `REQ-${Date.now()}Web`;
-     const reqData = item.formData;
-     const cleanText = `Submitted ${id} request for ${reqData.platForm} (${reqData.environmentDetails}) by ${reqData.fullName} works in ${item.organization} company`;
-     const response = await fetch(`/api/submit/accept/${item.id}`, {
+    const id = `REQ-${Date.now()}Web`;
+    const reqData = item.formData || {};
+    const cleanText = `Submitted ${id} request for ${reqData.platForm} (${reqData.environmentDetails}) by ${reqData.fullName} works in ${item.organization || item.company} company`;
+
+    // Send payload matching your backend req.body expectations
+    const response = await fetch(`/api/submit/accept/${item.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({cleanText})
+      body: JSON.stringify({
+        cleanText,
+        fullName: reqData.fullName,
+        email: reqData.email,
+        company: item.company || item.organization,
+        environmentDetails: reqData.environmentDetails,
+        platForm: reqData.platForm,
+        Req: reqData.Req,
+        num: reqData.num,
+        organization: item.organization
+      })
     });
 
     if (!response.ok) throw new Error('Failed to accept submission');
+
+    const result = await response.json();
+    const createdLog = result.log || {};
+
+    // Remove the item from the pending list after successful response
     item.remove();
 
     const acceptList = document.getElementById('accepted-list');
 
-    if(acceptList){
+    if (acceptList) {
       const container = document.createElement('div');
       container.className = 'space-y-1 request-item mb-3';
-      container.dataset.org = (submission.organization || submission.company || '').toLowerCase();
+      
+      // Fixed: Using item properties instead of undefined 'submission' variable
+      const orgName = item.organization || item.company || 'General';
+      container.dataset.org = orgName.toLowerCase();
 
       // Request button (With dark mode background)
       const btn = document.createElement('button');
@@ -273,14 +293,14 @@ acceptBtn?.addEventListener('click', async () => {
       details.innerHTML = `
         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
           <p class="text-blue-600 dark:text-blue-400 font-semibold">
-            ${escapeHtml(submission.organization || submission.company || 'General')}
+            ${escapeHtml(orgName)}
           </p>
           <span class="text-slate-500 dark:text-slate-400 text-[10px]">
             ${new Date().toLocaleString()}
           </span>
         </div>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-          ${escapeHtml(cleanText)}
+          ${escapeHtml(createdLog.entry || cleanText)}
         </p>
       `;
 
@@ -294,9 +314,8 @@ acceptBtn?.addEventListener('click', async () => {
 
       // Prepend to top of accepted list
       acceptList.prepend(container);
-
-      
     }
+
     show_toast('Request accepted and logged successfully!');
   } catch (error) {
     console.error('Accept error:', error);
