@@ -236,40 +236,51 @@ function renderRequests() {
 const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-    // DO NOT use `REQ-${Date.now()}Web` in the URL.
-    // Use the real MongoDB ID that came from the database record when rendering:
     const targetId = item._id || item.id; 
+
+    // Safely pull fields from formData IF item came from sessionStorage, OR directly from item
+    const data = item.formData || item;
+
+    const payload = {
+      fullName: data.fullName || '',
+      email: data.email || '',
+      company: data.company || sessionStorage.getItem('company_name') || 'GENERAL',
+      environmentDetails: data.environmentDetails || '',
+      platForm: data.platForm || '',
+      Req: data.Req || '',
+      num: data.num || data.phone || '',
+      organization: data.organization || data.selectedOrg || ''
+    };
 
     const response = await fetch(`/api/submit/accept/${targetId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        fullName: item.fullName,
-        email: item.email,
-        company: item.company,
-        environmentDetails: item.environmentDetails,
-        platForm: item.platForm,
-        Req: item.Req,
-        num: item.num,
-        organization: item.organization
-      })
+      body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error('Failed to accept submission');
+    if (!response.ok) {
+      const errRes = await response.json().catch(() => ({}));
+      throw new Error(errRes.message || `Server responded with status ${response.status}`);
+    }
 
     const result = await response.json();
 
-    // Remove pending card from UI
-    item.remove();
+    // 1. Remove DOM element (container is the HTML div, NOT item)
+    container.remove();
 
-    // Append to accepted list UI (you can still use REQ-... as a UI display text here)
+    // 2. Remove item from sessionStorage so it doesn't come back on page refresh
+    const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
+    const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
+    sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
+
+    // 3. Append to Accepted UI
     const acceptList = document.getElementById('accepted-list');
     if (acceptList) {
-      const displayTag = `REQ-${Date.now()}Web`; 
-      const container = document.createElement('div');
-      container.className = 'space-y-1 request-item mb-3';
+      const displayTag = item.id || `REQ-${Date.now()}Web`; 
+      const acceptedCard = document.createElement('div');
+      acceptedCard.className = 'space-y-1 request-item mb-3';
 
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -280,23 +291,22 @@ acceptBtn?.addEventListener('click', async () => {
       detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-xs space-y-2 mt-1';
       detailsDiv.innerHTML = `
         <p class="text-slate-700 dark:text-slate-300">
-          ${escapeHtml(result.log.entry || '')}
+          ${escapeHtml(result.log?.entry || 'Request accepted and logged successfully.')}
         </p>
       `;
 
       btn.addEventListener('click', () => detailsDiv.classList.toggle('hidden'));
-      container.appendChild(btn);
-      container.appendChild(detailsDiv);
-      acceptList.prepend(container);
+      acceptedCard.appendChild(btn);
+      acceptedCard.appendChild(detailsDiv);
+      acceptList.prepend(acceptedCard);
     }
 
     show_toast('Request accepted and logged successfully!');
   } catch (error) {
-    console.error('Accept error:', error);
-    show_toast('Failed to accept request.', true);
+    console.error('Accept error details:', error);
+    show_toast(`Failed to accept request: ${error.message}`, true);
   }
 });
-   
 
     // Delete handler
     const deleteBtn = details.querySelector('.delete-req-btn');
