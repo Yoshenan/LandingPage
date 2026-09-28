@@ -26,11 +26,11 @@ if (toggle && passwordInputMain) {
 
 const savedTheme = localStorage.getItem('theme');
 
-  if (savedTheme === 'light') {
-    document.documentElement.classList.remove('dark');
-  } else {
-    document.documentElement.classList.add('dark');
-  }
+if (savedTheme === 'light') {
+  document.documentElement.classList.remove('dark');
+} else {
+  document.documentElement.classList.add('dark');
+}
 
 function escapeHtml(str) {
   if (typeof str !== 'string') return '';
@@ -206,12 +206,12 @@ function renderRequests() {
 
           <button
             type="button"
-            class="accept-req-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-red-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
+            class="accept-req-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
             data-id="${escapeHtml(item.id || '')}"
           >
             Accept
           </button>
-          
+
         </div>
       </div>
 
@@ -233,80 +233,92 @@ function renderRequests() {
         populateFormForEdit(item.id);
       });
     }
-const acceptBtn = details.querySelector('.accept-req-btn');
-acceptBtn?.addEventListener('click', async () => {
-  try {
-    const targetId = item._id || item.id; 
 
-    // Safely pull fields from formData IF item came from sessionStorage, OR directly from item
-    const data = item.formData || item;
+    // Accept handler
+    const acceptBtn = details.querySelector('.accept-req-btn');
+    acceptBtn?.addEventListener('click', async () => {
+      try {
+        // FIX: must be the real MongoDB _id (saved when the request was submitted)
+        const targetId = item._id;
 
-    const payload = {
-      fullName: data.fullName || '',
-      email: data.email || '',
-      company: data.company || sessionStorage.getItem('company_name') || 'GENERAL',
-      environmentDetails: data.environmentDetails || '',
-      platForm: data.platForm || '',
-      Req: data.Req || '',
-      num: data.num || data.phone || '',
-      organization: data.organization || data.selectedOrg || ''
-    };
+        if (!targetId) {
+          show_toast(
+            'This request has no database id. Delete it and create it again.',
+            true
+          );
+          return;
+        }
 
-    const response = await fetch(`/api/submit/accept/${targetId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
+        // Safely pull fields from formData IF item came from sessionStorage, OR directly from item
+        const data = item.formData || item;
+
+        const payload = {
+          fullName: data.fullName || '',
+          email: data.email || '',
+          company: data.company || sessionStorage.getItem('company_name') || 'GENERAL',
+          environmentDetails: data.environmentDetails || '',
+          platForm: data.platForm || '',
+          Req: data.Req || '',
+          num: data.num || data.phone || '',
+          organization: data.organization || data.selectedOrg || ''
+        };
+
+        const response = await fetch(`/api/submit/accept/${targetId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          const errRes = await response.json().catch(() => ({}));
+          // FIX: server sends { error: ... }, not { message: ... }
+          throw new Error(errRes.error || `Server responded with status ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        // 1. Remove DOM element
+        container.remove();
+
+        // 2. Remove item from sessionStorage so it doesn't come back on page refresh
+        const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
+        const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
+        sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
+
+        // 3. Append to Accepted UI
+        const acceptList = document.getElementById('accepted-list');
+        if (acceptList) {
+          const displayTag = item.id || `REQ-${Date.now()}Web`;
+          const acceptedCard = document.createElement('div');
+          acceptedCard.className = 'space-y-1 request-item mb-3';
+
+          const acceptedBtn = document.createElement('button');
+          acceptedBtn.type = 'button';
+          acceptedBtn.className = 'w-full text-left bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-emerald-600 font-mono text-sm font-semibold';
+          acceptedBtn.textContent = displayTag;
+
+          const detailsDiv = document.createElement('div');
+          detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+          detailsDiv.innerHTML = `
+            <p class="text-slate-700 dark:text-slate-300">
+              ${escapeHtml(result.log?.entry || 'Request accepted and logged successfully.')}
+            </p>
+          `;
+
+          acceptedBtn.addEventListener('click', () => detailsDiv.classList.toggle('hidden'));
+          acceptedCard.appendChild(acceptedBtn);
+          acceptedCard.appendChild(detailsDiv);
+          acceptList.prepend(acceptedCard);
+        }
+
+        show_toast('Request accepted and logged successfully!');
+      } catch (error) {
+        console.error('Accept error details:', error);
+        show_toast(`Failed to accept request: ${error.message}`, true);
+      }
     });
-
-    if (!response.ok) {
-      const errRes = await response.json().catch(() => ({}));
-      throw new Error(errRes.message || `Server responded with status ${response.status}`);
-    }
-
-    const result = await response.json();
-
-    // 1. Remove DOM element (container is the HTML div, NOT item)
-    container.remove();
-
-    // 2. Remove item from sessionStorage so it doesn't come back on page refresh
-    const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
-    const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
-    sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
-
-    // 3. Append to Accepted UI
-    const acceptList = document.getElementById('accepted-list');
-    if (acceptList) {
-      const displayTag = item.id || `REQ-${Date.now()}Web`; 
-      const acceptedCard = document.createElement('div');
-      acceptedCard.className = 'space-y-1 request-item mb-3';
-
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'w-full text-left bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-emerald-600 font-mono text-sm font-semibold';
-      btn.textContent = displayTag;
-
-      const detailsDiv = document.createElement('div');
-      detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 p-3.5 rounded-lg text-xs space-y-2 mt-1';
-      detailsDiv.innerHTML = `
-        <p class="text-slate-700 dark:text-slate-300">
-          ${escapeHtml(result.log?.entry || 'Request accepted and logged successfully.')}
-        </p>
-      `;
-
-      btn.addEventListener('click', () => detailsDiv.classList.toggle('hidden'));
-      acceptedCard.appendChild(btn);
-      acceptedCard.appendChild(detailsDiv);
-      acceptList.prepend(acceptedCard);
-    }
-
-    show_toast('Request accepted and logged successfully!');
-  } catch (error) {
-    console.error('Accept error details:', error);
-    show_toast(`Failed to accept request: ${error.message}`, true);
-  }
-});
 
     // Delete handler
     const deleteBtn = details.querySelector('.delete-req-btn');
@@ -342,8 +354,6 @@ acceptBtn?.addEventListener('click', async () => {
 
   autoFilterByActiveCompany();
 }
-
-
 
 function checkAdminAccess() {
   const userRole = sessionStorage.getItem('user_role');
@@ -625,17 +635,8 @@ requestForm?.addEventListener('submit', async (e) => {
     }
 
     // 5. Build local storage record
-    const id = isEditing ? editingId : 'REQ-' + Date.now();
-    const cleanLogText = `Submitted ${Req} request for ${platForm} (${environmentDetails}) by ${fullName} works in ${company} company`;
+    const result = await response.json();
 
-    const newRequest = {
-      id,
-      organization: selectedOrg,
-      request: cleanLogText,
-      formData: { fullName, email, num, selectedOrg, environmentDetails, platForm, Req }
-    };
-
-    // 6. Update sessionStorage requests list
     let existingRequests = [];
     try {
       existingRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
@@ -643,6 +644,23 @@ requestForm?.addEventListener('submit', async (e) => {
       existingRequests = [];
     }
 
+    const id = isEditing ? editingId : 'REQ-' + Date.now();
+
+    // FIX: real Mongo id. From the server on create, preserved from the old item on edit.
+    const previous = existingRequests.find((r) => r.id === editingId);
+    const mongoId = isEditing ? previous?._id : result.data?._id;
+
+    const cleanLogText = `Submitted ${Req} request for ${platForm} (${environmentDetails}) by ${fullName} works in ${company} company`;
+
+    const newRequest = {
+      id,              // display label only
+      _id: mongoId,    // real MongoDB id, used by Accept
+      organization: selectedOrg,
+      request: cleanLogText,
+      formData: { fullName, email, num, selectedOrg, environmentDetails, platForm, Req }
+    };
+
+    // 6. Update sessionStorage requests list
     let toastMsg = '';
     if (isEditing) {
       existingRequests = existingRequests.map((item) => (item.id === editingId ? newRequest : item));
@@ -705,7 +723,7 @@ export async function authedFetch(url, options = {}) {
   return res;
 }
 
-export function show_toast (message, isError = false) {
+export function show_toast(message, isError = false) {
   let container = document.getElementById('toast-container');
 
   if (!container) {
@@ -745,7 +763,6 @@ async function getTelegramData() {
     data.forEach((submission) => {
       const item = document.createElement('div');
 
-      // Added explicit dark mode background and border colors here
       item.className =
         'bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg mb-3 shadow-sm text-sm overflow-hidden';
 
@@ -770,7 +787,7 @@ async function getTelegramData() {
             >
               ✓
             </button>
-            
+
             <button
               type="button"
               class="toggle-btn text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2 py-1 rounded hover:bg-slate-300 dark:hover:bg-slate-700 transition"
@@ -823,74 +840,69 @@ async function getTelegramData() {
       });
 
       // Accept Handler
-const acceptBtn = item.querySelector('.accept-btn');
-acceptBtn?.addEventListener('click', async () => {
-  try {
-     const id = `REQ-${Date.now()}Tele`;
-     const cleanText = `Submitted ${id} request for ${submission.platformCategory} (${submission.environment}) by ${submission.fullName} works in ${submission.client} company`;
-     const response = await fetch(`/api/submission/accept/${submission._id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({cleanText})
-    });
+      const acceptBtn = item.querySelector('.accept-btn');
+      acceptBtn?.addEventListener('click', async () => {
+        try {
+          const id = `REQ-${Date.now()}Tele`;
+          const cleanText = `Submitted ${id} request for ${submission.platformCategory} (${submission.environment}) by ${submission.fullName} works in ${submission.client} company`;
+          const response = await fetch(`/api/submission/accept/${submission._id}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cleanText })
+          });
 
-    if (!response.ok) throw new Error('Failed to accept submission');
-    item.remove();
+          if (!response.ok) throw new Error('Failed to accept submission');
+          item.remove();
 
-    const acceptList = document.getElementById('accepted-list');
+          const acceptList = document.getElementById('accepted-list');
 
-    if(acceptList){
-      const container = document.createElement('div');
-      container.className = 'space-y-1 request-item mb-3';
-      container.dataset.org = (submission.organization || submission.company || '').toLowerCase();
+          if (acceptList) {
+            const container = document.createElement('div');
+            container.className = 'space-y-1 request-item mb-3';
+            container.dataset.org = (submission.organization || submission.company || '').toLowerCase();
 
-      // Request button (With dark mode background)
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className =
-        'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
-      btn.textContent = id;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className =
+              'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+            btn.textContent = id;
 
-      // Details container (With dark mode background)
-      const details = document.createElement('div');
-      details.className =
-        'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+            const details = document.createElement('div');
+            details.className =
+              'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
 
-      details.innerHTML = `
-        <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
-          <p class="text-blue-600 dark:text-blue-400 font-semibold">
-            ${escapeHtml(submission.organization || submission.company || 'General')}
-          </p>
-          <span class="text-slate-500 dark:text-slate-400 text-[10px]">
-            ${new Date().toLocaleString()}
-          </span>
-        </div>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-          ${escapeHtml(cleanText)}
-        </p>
-      `;
+            details.innerHTML = `
+              <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
+                <p class="text-blue-600 dark:text-blue-400 font-semibold">
+                  ${escapeHtml(submission.organization || submission.company || 'General')}
+                </p>
+                <span class="text-slate-500 dark:text-slate-400 text-[10px]">
+                  ${new Date().toLocaleString()}
+                </span>
+              </div>
+              <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
+                ${escapeHtml(cleanText)}
+              </p>
+            `;
 
-      // Toggle details on button click
-      btn.addEventListener('click', () => {
-        details.classList.toggle('hidden');
+            btn.addEventListener('click', () => {
+              details.classList.toggle('hidden');
+            });
+
+            container.appendChild(btn);
+            container.appendChild(details);
+
+            // Prepend to top of accepted list
+            acceptList.prepend(container);
+          }
+          show_toast('Request accepted and logged successfully!');
+        } catch (error) {
+          console.error('Accept error:', error);
+          show_toast('Failed to accept request.', true);
+        }
       });
-
-      container.appendChild(btn);
-      container.appendChild(details);
-
-      // Prepend to top of accepted list
-      acceptList.prepend(container);
-
-      
-    }
-    show_toast('Request accepted and logged successfully!');
-  } catch (error) {
-    console.error('Accept error:', error);
-    show_toast('Failed to accept request.', true);
-  }
-});
 
       // Delete handler
       const deleteBtn = item.querySelector('.delete-btn');
