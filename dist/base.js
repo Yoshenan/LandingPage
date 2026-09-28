@@ -798,7 +798,7 @@ acceptBtn?.addEventListener('click', async () => {
       container.appendChild(details);
 
       // Prepend to top of accepted list
-      list.prepend(container);
+      acceptList.prepend(container);
 
       
     }
