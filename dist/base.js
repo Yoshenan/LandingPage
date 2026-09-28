@@ -237,25 +237,22 @@ function renderRequests() {
     const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
-    const id = `REQ-${Date.now()}Web`;
-    const reqData = item.formData || {};
-    const cleanText = `Submitted ${id} request for ${reqData.platForm} (${reqData.environmentDetails}) by ${reqData.fullName} works in ${item.organization || item.company} company`;
+    // CRITICAL: Send item._id (6aba4592b74318859b50830f) to the backend
+    const mongoId = item._id || item.id;
 
-    // Send payload matching your backend req.body expectations
-    const response = await fetch(`/api/submit/accept/${item._id}`, {
+    const response = await fetch(`/api/submit/accept/${mongoId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        cleanText,
-        fullName: reqData.fullName,
-        email: reqData.email,
-        company: item.company || item.organization,
-        environmentDetails: reqData.environmentDetails,
-        platForm: reqData.platForm,
-        Req: reqData.Req,
-        num: reqData.num,
+        fullName: item.fullName,
+        email: item.email,
+        company: item.company,
+        environmentDetails: item.environmentDetails,
+        platForm: item.platForm,
+        Req: item.Req,
+        num: item.num,
         organization: item.organization
       })
     });
@@ -263,56 +260,42 @@ acceptBtn?.addEventListener('click', async () => {
     if (!response.ok) throw new Error('Failed to accept submission');
 
     const result = await response.json();
-    const createdLog = result.log || {};
 
-    // Remove the item from the pending list after successful response
+    // Remove the pending item from DOM
     item.remove();
 
+    // Append to accepted list UI
     const acceptList = document.getElementById('accepted-list');
-
     if (acceptList) {
+      const displayId = `REQ-${Date.now()}Web`; // Custom string for display only
       const container = document.createElement('div');
       container.className = 'space-y-1 request-item mb-3';
-      
-      // Fixed: Using item properties instead of undefined 'submission' variable
-      const orgName = item.organization || item.company || 'General';
-      container.dataset.org = orgName.toLowerCase();
+      container.dataset.org = (item.organization || item.company || '').toLowerCase();
 
-      // Request button (With dark mode background)
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className =
-        'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
-      btn.textContent = id;
+      btn.className = 'w-full text-left bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-emerald-600 dark:text-emerald-400 font-mono text-sm font-semibold transition';
+      btn.textContent = displayId;
 
-      // Details container (With dark mode background)
-      const details = document.createElement('div');
-      details.className =
-        'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
-
-      details.innerHTML = `
+      const detailsDiv = document.createElement('div');
+      detailsDiv.className = 'hidden bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 p-3.5 rounded-lg text-xs space-y-2 mt-1';
+      detailsDiv.innerHTML = `
         <div class="flex justify-between items-center pb-2 border-b border-slate-200 dark:border-slate-800">
           <p class="text-blue-600 dark:text-blue-400 font-semibold">
-            ${escapeHtml(orgName)}
+            ${escapeHtml(item.organization || item.company || 'General')}
           </p>
           <span class="text-slate-500 dark:text-slate-400 text-[10px]">
             ${new Date().toLocaleString()}
           </span>
         </div>
         <p class="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">
-          ${escapeHtml(createdLog.entry || cleanText)}
+          ${escapeHtml(result.log.entry)}
         </p>
       `;
 
-      // Toggle details on button click
-      btn.addEventListener('click', () => {
-        details.classList.toggle('hidden');
-      });
-
+      btn.addEventListener('click', () => detailsDiv.classList.toggle('hidden'));
       container.appendChild(btn);
-      container.appendChild(details);
-
-      // Prepend to top of accepted list
+      container.appendChild(detailsDiv);
       acceptList.prepend(container);
     }
 
