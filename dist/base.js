@@ -206,7 +206,7 @@ function renderRequests() {
 
           <button
             type="button"
-            class="accept-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-red-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
+            class="accept-req-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-red-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
             data-id="${escapeHtml(item.id || '')}"
           >
             Accept
@@ -234,7 +234,7 @@ function renderRequests() {
       });
     }
 
-    const acceptBtn = item.querySelector('.accept-btn');
+    const acceptBtn = details.querySelector('.accept-req-btn');
 acceptBtn?.addEventListener('click', async () => {
   try {
      const id = `REQ-${Date.now()}Tele`;
