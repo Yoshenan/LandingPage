@@ -756,7 +756,7 @@ acceptBtn?.addEventListener('click', async () => {
     if (!response.ok) throw new Error('Failed to accept submission');
     item.remove();
 
-    const acceptList = document.getElementbyId('accepted-list');
+    const acceptList = document.getElementById('accepted-list');
 
     if(acceptList){
       const container = document.createElement('div');
