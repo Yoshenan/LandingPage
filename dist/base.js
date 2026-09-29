@@ -45,7 +45,7 @@ function escapeHtml(str) {
 document.addEventListener('DOMContentLoaded', () => {
   renderRequests();
 
-  const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+  const acceptedRequests = JSON.parse(localStorage.getItem('accepted_requests') || '[]');
   const acceptList = document.getElementById('accepted-list');
 
   acceptedRequests.forEach((request) => {
@@ -316,7 +316,7 @@ function renderRequests() {
         const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
         sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
 
-                const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+                const acceptedRequests = JSON.parse(localStorage.getItem('accepted_requests') || '[]');
 
         acceptedRequests.unshift({
           id: item.id,
@@ -325,7 +325,7 @@ function renderRequests() {
           date: new Date().toLocaleString()
         });
 
-        sessionStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
+        localStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
 
 const acceptList = document.getElementById('accepted-list');
         if (acceptList) {
