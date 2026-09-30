@@ -387,7 +387,7 @@ app.delete('/api/submission/:id',async (req, res) => {
   }
 });
 
-app.post('/api/submission/accept/:id',async(req,res)=>{
+app.post('/api/submission/accept/:id',requireAuth,async(req,res)=>{
   try{
      const {id} = req.params;
 
@@ -430,7 +430,7 @@ app.post('/api/submission/accept/:id',async(req,res)=>{
   }
 });
 
-app.post('/api/submit/accept/:id', async (req, res) => {
+app.post('/api/submit/accept/:id',requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
