@@ -105,6 +105,64 @@
           <script src="https://elfsightcdn.com/platform.js" async></script>
           <div class="elfsight-app-64b7151e-6146-4157-8547-157113da7bdf" data-elfsight-app-lazy></div>
         </div>
+
+        <script>
+  const APP = '.elfsight-app-64b7151e-6146-4157-8547-157113da7bdf';
+  const STYLE_ID = 'theme-override';
+
+  const DARK_CSS = `
+    * { color: #f1f5f9 !important; }
+    a { color: #93c5fd !important; text-decoration: underline; }
+    ::placeholder { color: #94a3b8 !important; opacity: 1 !important; }
+    input[type="checkbox"] { border-color: #64748b !important; }
+  `;
+
+  const LIGHT_CSS = `
+    * { color: #0f172a !important; }
+    a { color: #2563eb !important; text-decoration: underline; }
+    button { color: #ffffff !important; }
+    input, textarea, select {
+      background-color: #ffffff !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+    ::placeholder { color: #64748b !important; opacity: 1 !important; }
+  `;
+
+  function findShadowRoot() {
+    const container = document.querySelector(APP);
+    if (!container) return null;
+    if (container.shadowRoot) return container.shadowRoot;
+    for (const el of container.querySelectorAll('*')) {
+      if (el.shadowRoot) return el.shadowRoot;
+    }
+    return null;
+  }
+
+  function applyTheme() {
+    const root = findShadowRoot();
+    if (!root) return;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const css = isDark ? DARK_CSS : LIGHT_CSS;
+
+    let style = root.getElementById(STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = STYLE_ID;
+      root.appendChild(style);
+    }
+    if (style.textContent !== css) style.textContent = css;
+  }
+
+  new MutationObserver(applyTheme).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+
+  window.addEventListener('load', applyTheme);
+</script>
       </section>
 
       <!-- Telegram Banner -->
