@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="output.css" rel="stylesheet" />
+    <title>Contact & Help</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
+  </head>
+
+  <body class="bg-gray-100 dark:bg-slate-900 min-h-screen py-8 px-4 font-sans text-gray-800 dark:text-gray-100 transition-colors duration-200">
+    <div class="max-w-3xl mx-auto space-y-6">
+
+      <!-- Back Button -->
+      <a href="index.html" id="form-back" class="inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg border border-slate-700 dark:border-slate-600 transition text-sm font-medium shadow-sm">
+        &larr; Back to Dashboard
+      </a>
+
+      <!-- 1. QUICK GUIDE SECTION -->
+      <section class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm space-y-4 transition-colors">
+        <div class="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-3">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <span>⚡</span> Quick Guide: How to Use
+          </h2>
+          <span class="text-xs bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold px-2.5 py-1 rounded-full border border-indigo-100 dark:border-indigo-800/50">
+            3 Core Modules
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          
+          <!-- Step 1: Core Navigation -->
+          <div class="p-4 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60 flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg flex items-center justify-center font-bold text-xs shrink-0">1</span>
+              <h3 class="font-semibold text-gray-900 dark:text-slate-100 text-sm">Forms & Admin</h3>
+            </div>
+            
+            <ul class="text-xs text-gray-600 dark:text-slate-400 space-y-2 leading-relaxed pl-1">
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Fill & Submit:</strong> Complete form details, minimize/maximize panels as needed, and submit to trigger approval.
+              </li>
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Verify Forms:</strong> Admins can review pending requests to accept or reject them. Accepted entries are saved.
+              </li>
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Manage Users:</strong> Admins register, assign company credentials, and update user permissions.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Step 2: Features & Accessibility -->
+          <div class="p-4 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60 flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg flex items-center justify-center font-bold text-xs shrink-0">2</span>
+              <h3 class="font-semibold text-gray-900 dark:text-slate-100 text-sm">Audit & Features</h3>
+            </div>
+
+            <ul class="text-xs text-gray-600 dark:text-slate-400 space-y-2 leading-relaxed pl-1">
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Activity Audits:</strong> User activities are logged and organized automatically by assigned company.
+              </li>
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Dark Mode:</strong> Toggle theme seamlessly using the sun/moon icon.
+              </li>
+              <li>
+                <strong class="text-gray-800 dark:text-slate-200">Flexibility:</strong> Sidebars and forms are collapsible. Forms can also be submitted directly via Telegram.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Step 3: Get Assistance -->
+          <div class="p-4 bg-gray-50 dark:bg-slate-800/60 rounded-xl border border-gray-100 dark:border-slate-700/60 flex flex-col gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 bg-indigo-600 dark:bg-indigo-500 text-white rounded-lg flex items-center justify-center font-bold text-xs shrink-0">3</span>
+              <h3 class="font-semibold text-gray-900 dark:text-slate-100 text-sm">Need Help?</h3>
+            </div>
+
+            <p class="text-xs text-gray-600 dark:text-slate-400 leading-relaxed">
+              Have questions or found a bug? Use the form below to submit a ticket, or click the Telegram button for real-time bot support.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <section class = "bg-white dark:bg-slate-800 text-black dark:text-white p-6 rounded-2xl  border border-gray-200 dark:border-slate-700 shadow-sm space-y-4 transition-colors">
+         <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <span>📬</span> Contact Us
+        </h3>
+<!-- Elfsight Form Builder | Untitled Form Builder -->
+<!-- Elfsight Form Builder | Untitled Form Builder -->
+<script src="https://elfsightcdn.com/platform.js" async></script>
+<div class="elfsight-app-64b7151e-6146-4157-8547-157113da7bdf" data-elfsight-app-lazy></div>
+  
+<script>
+  const APP = '.elfsight-app-64b7151e-6146-4157-8547-157113da7bdf';
+  const STYLE_ID = 'dark-override';
+
+    const DARK_CSS = `
+    * { color: #f1f5f9 !important; }
+
+    a { color: #93c5fd !important; text-decoration: underline; }
+
+    ::placeholder { color: #94a3b8 !important; opacity: 1 !important; }
+
+    input[type="checkbox"] { border-color: #64748b !important; }
+  `;
+
+  function findShadowRoot() {
+    const container = document.querySelector(APP);
+    if (!container) return null;
+    if (container.shadowRoot) return container.shadowRoot;
+    for (const el of container.querySelectorAll('*')) {
+      if (el.shadowRoot) return el.shadowRoot;
+    }
+    return null;
+  }
+
+  function applyTheme() {
+    const root = findShadowRoot();
+    if (!root) return;
+
+    const isDark = document.documentElement.classList.contains('dark');
+    const existing = root.getElementById(STYLE_ID);
+
+    if (isDark && !existing) {
+      const style = document.createElement('style');
+      style.id = STYLE_ID;
+      style.textContent = DARK_CSS;
+      root.appendChild(style);
+    } else if (!isDark && existing) {
+      existing.remove();
+    }
+  }
+
+  // Runs when the widget loads and whenever the theme class changes
+  new MutationObserver(applyTheme).observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+
+  window.addEventListener('load', applyTheme);
+</script>
+
+      </section>
+
+      <section class="p-5 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-700 dark:to-indigo-800 rounded-2xl text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-xl shrink-0">
+            ✈️
+          </div>
+          <div>
+            <h4 class="font-bold text-sm">Prefer Instant Support?</h4>
+            <p class="text-xs text-blue-100">Launch our Telegram bot to submit forms or chat directly.</p>
+          </div>
+        </div>
+
+        <a href="https://t.me/@PixelWispBot?start=help" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-white text-blue-600 dark:bg-slate-100 dark:text-blue-700 font-semibold text-xs rounded-lg shadow hover:bg-blue-50 transition whitespace-nowrap">
+          Open Telegram Bot →
+        </a>
+      </section>
+
+      
+    </div>
+    </body>
+    </html>
