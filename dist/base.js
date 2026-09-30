@@ -32,6 +32,10 @@ if (savedTheme === 'light') {
   document.documentElement.classList.add('dark');
 }
 
+function isAdmin(){
+  sessionStorage.getItem("user_role")==="Admin";
+}
+
 function escapeHtml(str) {
   if (typeof str !== 'string') return '';
   return str
@@ -233,13 +237,15 @@ function renderRequests() {
             Delete
           </button>
 
+          ${isAdmin() ? `
+
           <button
             type="button"
             class="accept-req-btn text-[11px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/30 px-2.5 py-1 rounded transition"
             data-id="${escapeHtml(item.id || '')}"
           >
             Accept
-          </button>
+          </button>`:""}
 
         </div>
       </div>
@@ -820,12 +826,13 @@ async function getTelegramData() {
           </div>
 
           <div class="flex items-center gap-2">
+            ${isAdmin() ? `
             <button
               class="accept-btn text-emerald-400 hover:text-emerald-300 px-2 py-1 rounded hover:bg-gray-700 font-bold"
               title="Accept Request"
             >
               ✓
-            </button>
+            </button>`:""}
 
             <button
               type="button"
