@@ -345,8 +345,6 @@
 
     </section>
 
-
-    <!-- QUICK ACTIONS -->
     <section class="space-y-4">
 
       <div class="flex items-center justify-between">
@@ -370,7 +368,7 @@
 
           <div
             data-action="Form Opened"
-            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
           >
 
             <div>
@@ -412,7 +410,7 @@
 
           <div
             data-action="Forms Verified"
-            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
           >
 
             <div>
@@ -458,7 +456,7 @@
 
           <div
             data-action="Managing Users"
-            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+            class="log-box relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
           >
 
             <div>
@@ -496,42 +494,53 @@
 
 
         <!-- Contact Support -->
-       <a href="contact.html">
-    <div
-        data-action="Contacted Support"
-        class="log-box cursor-pointer group relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-850 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
-    >
-        <div>
-            <div
+        <a href="contact.html" class="group block h-full">
+
+          <div
+            data-action="Contacted Support"
+            class="log-box cursor-pointer relative bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60 p-5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all duration-200 h-full flex flex-col justify-between shadow-md hover:shadow-emerald-500/5"
+          >
+
+            <div>
+
+              <div
                 class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-3 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform"
-            >
+              >
                 🎧
+              </div>
+
+              <h3
+                class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+              >
+                Contact Support
+              </h3>
+
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Get assistance or report issues to the support team.
+              </p>
+
             </div>
 
-            <h3
-                class="text-sm font-semibold text-slate-900 dark:text-white mb-1 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors"
+            <div
+              class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
             >
-                Contact Support
-            </h3>
-
-            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Get assistance or report issues to the support team.
-            </p>
-        </div>
-
-        <div
-            class="flex items-center justify-between mt-6 text-xs font-medium text-emerald-600 dark:text-emerald-400"
-        >
-            <span>Get Help</span>
-
-            <span class="group-hover:translate-x-1 transition-transform">
+              <span>Get Help</span>
+              <span class="group-hover:translate-x-1 transition-transform">
                 &rarr;
-            </span>
-        </div>
-    </div>
-</a>
+              </span>
+            </div>
+
+          </div>
+
+        </a>
+
+      </div>
 
     </section>
+    
+
+
+    
 
   </main>
 
