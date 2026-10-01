@@ -115,7 +115,7 @@ function checkPendingEditMode() {
 
   if (!editingId || !formEl) return;
 
-  const rawData = sessionStorage.getItem('requests');
+  const rawData = localStorage.getItem('requests');
   if (!rawData) return;
 
   try {
@@ -187,7 +187,7 @@ function renderRequests() {
   requestList.innerHTML = '';
 
   const existingRequests = JSON.parse(
-    sessionStorage.getItem('requests') || '[]'
+    localStorage.getItem('requests') || '[]'
   );
 
   if (existingRequests.length === 0) {
@@ -318,11 +318,11 @@ function renderRequests() {
         container.remove();
 
         // 2. Remove item from sessionStorage so it doesn't come back on page refresh
-        const currentRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
+        const currentRequests = JSON.parse(localStorage.getItem('requests') || '[]');
         const updatedRequests = currentRequests.filter((r) => r.id !== item.id && r._id !== targetId);
-        sessionStorage.setItem('requests', JSON.stringify(updatedRequests));
+        localStorage.setItem('requests', JSON.stringify(updatedRequests));
 
-                const acceptedRequests = JSON.parse(localStorage.getItem('accepted_requests') || '[]');
+        const acceptedRequests = JSON.parse(localStorage.getItem('accepted_requests') || '[]');
 
         acceptedRequests.unshift({
           id: item.id,
@@ -381,7 +381,7 @@ const acceptList = document.getElementById('accepted-list');
           (request) => request.id !== item.id
         );
 
-        sessionStorage.setItem(
+        localStorage.setItem(
           'requests',
           JSON.stringify(updatedRequests)
         );
@@ -684,7 +684,7 @@ requestForm?.addEventListener('submit', async (e) => {
 
     let existingRequests = [];
     try {
-      existingRequests = JSON.parse(sessionStorage.getItem('requests') || '[]');
+      existingRequests = JSON.parse(localStorage.getItem('requests') || '[]');
     } catch (err) {
       existingRequests = [];
     }
@@ -715,7 +715,7 @@ requestForm?.addEventListener('submit', async (e) => {
       toastMsg = `Request ${id} created successfully!`;
     }
 
-    sessionStorage.setItem('requests', JSON.stringify(existingRequests));
+    localStorage.setItem('requests', JSON.stringify(existingRequests));
     sessionStorage.setItem('pending_toast', toastMsg);
 
     // 7. Reset Form & Redirect
@@ -796,6 +796,8 @@ async function getTelegramData() {
     const response = await fetch('/api/submission');
     if (!response.ok) throw new Error('Failed to fetch Telegram submissions');
     const data = await response.json();
+
+    localStorage.setItem("telegram_request",JSON.stringify(data));
 
     if (!list) return;
     list.innerHTML = '';
@@ -902,7 +904,7 @@ async function getTelegramData() {
                     if (!response.ok) throw new Error('Failed to accept submission');
           item.remove();
 
-          const acceptedRequests = JSON.parse(sessionStorage.getItem('accepted_requests') || '[]');
+          const acceptedRequests = JSON.parse(localStorage.getItem('accepted_requests') || '[]');
 
           acceptedRequests.unshift({
             id: id,
@@ -911,7 +913,7 @@ async function getTelegramData() {
             date: new Date().toLocaleString()
           });
 
-          sessionStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
+          localStorage.setItem('accepted_requests', JSON.stringify(acceptedRequests));
 
           const acceptList = document.getElementById('accepted-list');
 
