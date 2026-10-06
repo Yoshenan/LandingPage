@@ -89,18 +89,29 @@ app.use(disableCache);
 
 
 // 5. Auth Middleware Definition
-export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-   if (req.session && req.session.username) {
-     return res.status(401).json({ error: 'Unauthorized' });
-     return next();
-   }
+export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
+  // 1. If no session, reject immediately
+  if (!req.session || !req.session.username) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
 
-   const user = User.findOne({user_role:req.session.role});
+  try {
+    // 2. Fetch the user by their logged-in username
+    const user = await User.findOne({ username: req.session.username });
 
-   if(user!== "Admin"){
-       return res.status(403).json({ error: 'Needs Admin Access' });
-     }
-   return next();
+    // 3. Check if user exists and has the Admin role (checking 'role' or 'user_role')
+    const role = user?.role || user?.user_role;
+    
+    if (!user || String(role).toLowerCase() !== 'admin') {
+      return res.status(403).json({ error: 'Needs Admin Access' });
+    }
+
+    // 4. Pass control to the endpoint handler
+    return next();
+  } catch (err) {
+    console.error('requireAuth Error:', err);
+    return res.status(500).json({ error: 'Authentication failed' });
+  }
 };
 
 // 6. Static Files & Public Pages
