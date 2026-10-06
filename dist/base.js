@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCompanyUI(sessionStorage.getItem('company_name') || '');
   switchState(sessionStorage.getItem('logged_username') ? 'Dashboard' : 'Login');
   getLogs();
+  isAdmin();
 
   // Check and display pending toast notification after page redirect
   checkPendingToast();
